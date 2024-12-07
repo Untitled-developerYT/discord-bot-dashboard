@@ -58,7 +58,8 @@ include 'online.php';
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f8;
+            background-image: url('../assets/background.jpg');
+            background-repeat: no-repeat;
             margin: 0;
             padding: 0;
             display: flex;
