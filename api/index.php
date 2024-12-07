@@ -1,4 +1,8 @@
 <?php
+// Set environment variables for bot token and channel ID directly in the script
+$botToken = getenv('DISCORD_BOT_TOKEN') ?: 'your_bot_token_here'; // Replace if not set
+$channelId = getenv('DISCORD_CHANNEL_ID') ?: 'your_channel_id_here'; // Replace if not set
+
 // Check if this is an AJAX request to fetch messages
 if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
     // Fetch messages from Discord API
@@ -6,22 +10,19 @@ if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
 
     $curl = curl_init();
     curl_setopt_array($curl, [
-        CURLOPT_URL => "https://discord.com/api/v10/channels/1277599931275804774/messages",
+        CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER => [
             "Accept: application/json",
-            "Authorization: Bot MTI4MDY0NTAzODY5MDUzMzQxNg.G01pS_.ogIz5xBhqe2PTSRwHVO2R8dtUr29Htkyk_swTI", // Replace with your bot token
+            "Authorization: Bot $botToken", // Use bot token from environment variable
         ],
     ]);
     $response = curl_exec($curl);
     curl_close($curl);
 
     echo $response;
-	exit(); // Stop further execution for AJAX requests
+    exit(); // Stop further execution for AJAX requests
 }
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +31,7 @@ if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Discord Messages</title>
-        <style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f8;
@@ -114,7 +115,6 @@ if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
         }
 
     </style>
-
 </head>
 <body>
     <h1>Discord Channel Messages</h1>
@@ -123,98 +123,82 @@ if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
     </div>
 
     <script>
+        // PHP injects the bot token and channel ID into JavaScript
+        const botToken = "<?php echo $botToken; ?>";
+        const channelId = "<?php echo $channelId; ?>";
+
         // Function to fetch and update messages
-       function fetchMessages() {
-    const container = document.getElementById("messageContainer");
+        function fetchMessages() {
+            const container = document.getElementById("messageContainer");
 
-    // Calculate if the user is near the bottom
-    const isAtBottom = Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 50;
+            // Calculate if the user is near the bottom
+            const isAtBottom = Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 50;
 
-    fetch('?action=fetch') // AJAX request to this PHP file
-        .then(response => response.json())
-        .then(data => {
-            container.innerHTML = ''; // Clear existing messages
+            fetch(`?action=fetch&channelId=${channelId}&token=${botToken}`) // AJAX request to this PHP file
+                .then(response => response.json())
+                .then(data => {
+                    container.innerHTML = ''; // Clear existing messages
 
-            // Add messages to the container
-            data.forEach(message => {
-                const messageElement = document.createElement("p");
-                messageElement.innerHTML = `<strong>${message.author.username}:</strong> ${message.content}`;
-                container.appendChild(messageElement);
-            });
+                    // Add messages to the container
+                    data.forEach(message => {
+                        const messageElement = document.createElement("p");
+                        messageElement.innerHTML = `<strong>${message.author.username}:</strong> ${message.content}`;
+                        container.appendChild(messageElement);
+                    });
 
-            // Auto-scroll only if the user is already near the bottom
-            if (isAtBottom) {
-                container.scrollTop = container.scrollHeight;
+                    // Auto-scroll only if the user is already near the bottom
+                    if (isAtBottom) {
+                        container.scrollTop = container.scrollHeight;
+                    }
+                })
+                .catch(error => console.error('Error fetching messages:', error));
+        }
+
+        // Fetch messages every 5 seconds
+        setInterval(fetchMessages, 5000);
+
+        // Initial fetch
+        fetchMessages();
+
+        // WebSocket Setup for Real-time Updates
+        const ws = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
+
+        ws.addEventListener("open", () => {
+            ws.send(JSON.stringify({
+                op: 2,
+                d: {
+                    token: botToken,
+                    intents: 512,
+                    properties: {
+                        $os: "linux",
+                        $browser: "chrome",
+                        $device: "chrome",
+                    },
+                    presence: {
+                        activities: [{ name: "I'm watching you", type: 1 }],
+                        status: "online",
+                        afk: false
+                    }
+                }
+            }));
+        });
+
+        ws.addEventListener("message", function (data) {
+            const payload = JSON.parse(data.data);
+            const { t, d } = payload;
+
+            if (t === "MESSAGE_CREATE") {
+                const para = document.createElement("p");
+                const node = document.createTextNode(`[${d.author.username}]: ${d.content}`);
+                para.appendChild(node);
+                const element = document.getElementById("messageContainer");
+                element.appendChild(para);
             }
-        })
-        .catch(error => console.error('Error fetching messages:', error));
-}
+        });
 
-// Fetch messages every 5 seconds
-setInterval(fetchMessages, 5000);
-
-// Initial fetch
-fetchMessages();
-  let ws = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json"),
-    interval = 0,
-    token = "MTI4MDY0NTAzODY5MDUzMzQxNg.G01pS_.ogIz5xBhqe2PTSRwHVO2R8dtUr29Htkyk_swTI"
-;
-
-ws.addEventListener("open", () => {
-	ws.send(JSON.stringify({
-		op: 2,
-		d: {
-			token,
-			intents: 512,
-			properties: {
-				$os: "linux",
-				$browser: "chrome",
-				$device: "chrome",
-			},
-			"presence": {
-				"activities": [{
-					"name": "I'm watching you",
-					"type": 1
-				}],
-				"status": "dnd",
-				"since": 91879201,
-				"afk": false
-			},
-        },
-    }));
-})
-
-ws.addEventListener("message", function incoming(data) {
-   let payload = JSON.parse(data.data);
-
-   const { t, event, op, d } = payload;
-
-   // Setup heartbeats to keep the connection alive
-   switch (op) {
-      case 10:
-         setInterval(() => {
-            ws.send(JSON.stringify({ op: 1, d: null }));
-         }, d.heartbeat_interval);
-         break;
-   }
-
-   // Event type
-	switch (t) {
-		case "MESSAGE_CREATE":
-		const para = document.createElement("p");
-		const node = document.createTextNode(`[${d.author.username}]: ${d.content} ${d.channel_id}`);
-		para.appendChild(node);
-		const element = document.getElementById("messageContainer");
-		element.appendChild(para);
-		
-	}
-})
-
-ws.addEventListener("close", () => {
-   // ... handle closing ...
-})
-
-
+        ws.addEventListener("close", () => {
+            console.log("WebSocket closed");
+        });
     </script>
 </body>
 </html>
