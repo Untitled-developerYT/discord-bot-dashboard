@@ -1,8 +1,9 @@
 {
   "require": {
     "php": "^7.3",
-    "curl/curl": "^2.5",
-	"php-curl-class/php-curl-class": "^11.0",
+    "curl/curl": "*",
+	"ext-curl": "*"
+	"php-curl-class/php-curl-class": "*",
 	"tracy/tracy": "^2.0"
   }
 }
