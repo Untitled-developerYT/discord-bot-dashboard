@@ -125,95 +125,65 @@ if (isset($_GET["action"])) {
     </style>
 </head>
 <body>
-    <h1>Discord Channel Messages</h1>
-    <div id="messageContainer">
-        <!-- Messages will be dynamically inserted here -->
+<div class="chat-container">
+        <div id="messageContainer">
+            <!-- Messages will be dynamically added here -->
+        </div>
+        <form id="sendMessageForm">
+            <input type="text" id="messageInput" placeholder="Type a message..." required>
+            <button type="submit">Send</button>
+        </form>
     </div>
     <script>
-        // Function to fetch and update messages
-       function fetchMessages() {
-    const container = document.getElementById("messageContainer");
+        const messageContainer = document.getElementById("messageContainer");
+        const messageForm = document.getElementById("sendMessageForm");
+        const messageInput = document.getElementById("messageInput");
 
-    // Calculate if the user is near the bottom
-    const isAtBottom = Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 50;
+        // Function to fetch messages
+        function fetchMessages() {
+            fetch("?action=fetch")
+                .then(response => response.json())
+                .then(data => {
+                    messageContainer.innerHTML = ""; // Clear existing messages
+                    data.forEach(message => {
+                        const p = document.createElement("p");
+                        p.innerHTML = `<strong>${message.author.username}:</strong> ${message.content}`;
+                        messageContainer.appendChild(p);
+                    });
+                })
+                .catch(error => console.error("Error fetching messages:", error));
+        }
 
-    fetch('?action=fetch') // AJAX request to this PHP file
-        .then(response => response.json())
-        .then(data => {
-            container.innerHTML = ''; // Clear existing messages
+        // Function to send a message
+        function sendMessage(content) {
+            const formData = new FormData();
+            formData.append("message", content);
 
-            // Add messages to the container
-            data.forEach(message => {
-                const messageElement = document.createElement("p");
-                messageElement.innerHTML = `<strong>${message.author.username}:</strong> ${message.content}`;
-                container.appendChild(messageElement);
-            });
+            fetch("?action=send", {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Message sent:", data);
+                    fetchMessages(); // Refresh messages after sending
+                })
+                .catch(error => console.error("Error sending message:", error));
+        }
 
-            // Auto-scroll only if the user is already near the bottom
-            if (isAtBottom) {
-                container.scrollTop = container.scrollHeight;
+        // Event listener for form submission
+        messageForm.addEventListener("submit", event => {
+            event.preventDefault(); // Prevent form from reloading the page
+            const content = messageInput.value.trim();
+            if (content) {
+                sendMessage(content); // Send the message
+                messageInput.value = ""; // Clear the input
             }
-        })
-        //.catch(error => console.error('Error fetching messages:', error));
-}
+        });
 
-// Fetch messages every 5 seconds
-setInterval(fetchMessages, 5000);
-
-// Initial fetch
-fetchMessages();
-  let ws = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json"),
-    interval = 0,
-    token = "<?php echo $botToken;?>"
-;
-
-ws.addEventListener("open", () => {
-	ws.send(JSON.stringify({
-		op: 2,
-		d: {
-			token,
-			intents: 512,
-			properties: {
-				$os: "linux",
-				$browser: "chrome",
-				$device: "chrome",
-			},
-			"presence": {
-				"activities": [{
-					"name": "I'm watching you",
-					"type": 1
-				}],
-				"status": "dnd",
-				"since": 91879201,
-				"afk": false
-			},
-        },
-    }));
-})
-
-ws.addEventListener("message", function incoming(data) {
-   let payload = JSON.parse(data.data);
-
-   const { t, event, op, d } = payload;
-
-   // Setup heartbeats to keep the connection alive
-   switch (op) {
-      case 10:
-         setInterval(() => {
-            ws.send(JSON.stringify({ op: 1, d: null }));
-         }, d.heartbeat_interval);
-         break;
-   }
-
-   // Event type
-	
-})
-
-ws.addEventListener("close", () => {
-   // ... handle closing ...
-})
-
-
+        // Fetch messages every 5 seconds
+        setInterval(fetchMessages, 5000);
+        fetchMessages(); // Initial fetch
     </script>
 </body>
 </html>
