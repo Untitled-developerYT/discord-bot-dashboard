@@ -1,5 +1,6 @@
 <?php
 $botToken = getenv('DISCORD_BOT_TOKEN');
+$channelId = getenv('DISCORD_CHANNEL_ID');
 // Check if this is an AJAX request to fetch messages
 if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
     // Fetch messages from Discord API
@@ -7,7 +8,7 @@ if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
 
     $curl = curl_init();
     curl_setopt_array($curl, [
-        CURLOPT_URL => "https://discord.com/api/v10/channels/1277599931275804774/messages",
+        CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER => [
             "Accept: application/json",
