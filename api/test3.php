@@ -2,41 +2,75 @@
 // Your bot token
 $botToken = getenv('DISCORD_BOT_TOKEN');
 
-// Endpoint for updating bot presence
-$url = "https://discord.com/api/v10/users/@me/settings";
 
-// Data for setting the bot's status and activity
-$data = [
-    "status" => "dnd", // "dnd" for "Do Not Disturb"
-    "custom_status" => [
-        "text" => "I'm watching you"
-    ]
-];
+// Gateway URL
+$gatewayUrl = "wss://gateway.discord.gg/?v=10&encoding=json";
 
-// Function to send the HTTP request
-function sendCurlRequest($url, $data, $botToken) {
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => "PATCH", // Use PATCH to update settings
-        CURLOPT_HTTPHEADER => [
-            "Authorization: Bot $botToken",
-            "Content-Type: application/json"
+// JSON payload to set the bot's presence
+$presencePayload = json_encode([
+    "op" => 2, // Identify opcode
+    "d" => [
+        "token" => $botToken,
+        "intents" => 0, // No events, just set status
+        "properties" => [
+            "\$os" => "linux",
+            "\$browser" => "custom",
+            "\$device" => "custom",
         ],
-        CURLOPT_POSTFIELDS => json_encode($data),
-    ]);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    return json_decode($response, true);
+        "presence" => [
+            "status" => "dnd", // Set status to Do Not Disturb
+            "activities" => [
+                [
+                    "name" => "I'm watching you", // Custom activity text
+                    "type" => 0, // "Playing" activity type
+                ]
+            ],
+            "afk" => false,
+        ]
+    ]
+]);
+
+// Function to send WebSocket messages
+function sendWebSocketMessage($url, $payload) {
+    // Open WebSocket connection
+    $connection = fsockopen("ssl://" . parse_url($url, PHP_URL_HOST), 443);
+
+    if (!$connection) {
+        die("Failed to connect to WebSocket");
+    }
+
+    $headers = "GET " . parse_url($url, PHP_URL_PATH) . " HTTP/1.1\r\n" .
+               "Host: " . parse_url($url, PHP_URL_HOST) . "\r\n" .
+               "Upgrade: websocket\r\n" .
+               "Connection: Upgrade\r\n" .
+               "Sec-WebSocket-Key: " . base64_encode(random_bytes(16)) . "\r\n" .
+               "Sec-WebSocket-Version: 13\r\n\r\n";
+
+    fwrite($connection, $headers);
+
+    // Wait for handshake response
+    while (!feof($connection)) {
+        $response = fgets($connection);
+        if (strpos($response, "\r\n\r\n") !== false) {
+            break;
+        }
+    }
+
+    // Send payload
+    $frame = chr(129) . chr(strlen($payload)) . $payload; // WebSocket frame format
+    fwrite($connection, $frame);
+
+    // Read server response
+    while (!feof($connection)) {
+        $serverResponse = fread($connection, 1024);
+        echo "Server Response: " . $serverResponse . "\n";
+        break; // Only read the first response
+    }
+
+    fclose($connection);
 }
 
-// Make the API call
-$response = sendCurlRequest($url, $data, $botToken);
+// Send the presence payload to the WebSocket
+sendWebSocketMessage($gatewayUrl, $presencePayload);
 
-// Output the response
-if (isset($response['message'])) {
-    echo "Error: " . $response['message'];
-} else {
-    echo "Status and activity updated successfully!";
-}
+echo "Status and activity sent!";
