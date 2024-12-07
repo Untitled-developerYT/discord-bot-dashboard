@@ -1,7 +1,7 @@
 <?php
 // Set environment variables for bot token and channel ID directly in the script
-$botToken = getenv('DISCORD_BOT_TOKEN') ?: 'your_bot_token_here'; // Replace if not set
-$channelId = getenv('DISCORD_CHANNEL_ID') ?: 'your_channel_id_here'; // Replace if not set
+$botToken = getenv('DISCORD_BOT_TOKEN'); // Replace if not set
+$channelId = getenv('DISCORD_CHANNEL_ID'); // Replace if not set
 
 // Check if this is an AJAX request to fetch messages
 if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
