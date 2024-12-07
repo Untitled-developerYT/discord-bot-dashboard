@@ -1,5 +1,5 @@
 <?php
-include 'online.php';
+
 $botToken = getenv('DISCORD_BOT_TOKEN');
 $channelId = getenv('DISCORD_CHANNEL_ID');
 // Check if this is an AJAX request to fetch messages
@@ -46,6 +46,7 @@ if (isset($_GET["action"])) {
         exit();
     }
 }
+include 'online.php';
 ?>
 
 <!DOCTYPE html>
