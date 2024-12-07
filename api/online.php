@@ -9,14 +9,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'getToken') {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set Bot Status</title>
-</head>
-<body>
+<html>
     <script>
         // Fetch the bot token securely from the PHP endpoint
         fetch("?action=getToken")
@@ -70,5 +63,4 @@ if (isset($_GET['action']) && $_GET['action'] === 'getToken') {
                 console.error("Error fetching token:", error);
             });
     </script>
-</body>
 </html>
