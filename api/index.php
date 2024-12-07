@@ -5,7 +5,7 @@ if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
     // Fetch messages from Discord API
     header("Content-Type: application/json");
 
-    $curl = curl_init();
+    $curl = curl\curl_init();
     curl_setopt_array($curl, [
         CURLOPT_URL => "https://discord.com/api/v10/channels/1277599931275804774/messages",
         CURLOPT_RETURNTRANSFER => true,
