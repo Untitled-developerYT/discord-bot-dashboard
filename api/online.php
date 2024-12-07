@@ -41,7 +41,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'getToken') {
                             },
                             presence: {
                                 activities: [{
-                                    name: "I'm watching you",
+                                    name: "A user is online",
                                     type: 0 // "Playing" activity type
                                 }],
                                 status: "dnd", // Set status to "Do Not Disturb"
