@@ -2,7 +2,7 @@
   "require": {
     "php": "^7.3",
     "curl/curl": "^2.5",
-	"php-curl-class/php-curl-class": "^11",
+	"php-curl-class/php-curl-class": "^11.0",
 	"tracy/tracy": "^2.0"
   }
 }
