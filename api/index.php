@@ -2,28 +2,49 @@
 $botToken = getenv('DISCORD_BOT_TOKEN');
 $channelId = getenv('DISCORD_CHANNEL_ID');
 // Check if this is an AJAX request to fetch messages
-if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
-    // Fetch messages from Discord API
+if (isset($_GET["action"])) {
     header("Content-Type: application/json");
 
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER => [
-            "Accept: application/json",
-            "Authorization: Bot $botToken", // Replace with your bot token
-        ],
-    ]);
-    $response = curl_exec($curl);
-    curl_close($curl);
+    if ($_GET["action"] === "fetch") {
+        // Fetch messages from Discord
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bot $botToken",
+                "Content-Type: application/json",
+            ],
+        ]);
 
-    echo $response;
-	exit(); // Stop further execution for AJAX requests
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        echo $response;
+        exit();
+    } elseif ($_GET["action"] === "send") {
+        // Send a message to Discord
+        $message = json_encode(["content" => $_POST["message"]]);
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $message,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bot $botToken",
+                "Content-Type: application/json",
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        echo $response;
+        exit();
+    }
 }
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -31,8 +52,8 @@ if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Discord Messages</title>
-        <style>
+    <title>Discord Chat</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f8;
@@ -73,57 +94,41 @@ if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
 
         p strong {
             color: #007bff;
-            margin-right: 5px;
         }
 
-        .message-right {
-            align-self: flex-end;
-            background-color: #007bff;
-            color: white;
-        }
-
-        .message-left {
-            align-self: flex-start;
-            background-color: #e0e0e0;
-            color: #333;
-        }
-
-        .chat-header {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
+        form {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 10px;
+            background-color: #f1f1f1;
         }
 
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: green; /* Default to green for "online" */
+        form input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
         }
 
-        .status-offline {
-            background-color: red;
+        form button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
-        .status-idle {
-            background-color: yellow;
+        form button:hover {
+            background-color: #0056b3;
         }
-
     </style>
-
 </head>
 <body>
     <h1>Discord Channel Messages</h1>
     <div id="messageContainer">
         <!-- Messages will be dynamically inserted here -->
     </div>
-
     <script>
         // Function to fetch and update messages
        function fetchMessages() {
