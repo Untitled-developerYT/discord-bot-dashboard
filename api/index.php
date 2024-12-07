@@ -201,15 +201,7 @@ ws.addEventListener("message", function incoming(data) {
    }
 
    // Event type
-	switch (t) {
-		case "MESSAGE_CREATE":
-		const para = document.createElement("p");
-		const node = document.createTextNode(`[${d.author.username}]: ${d.content} ${d.channel_id}`);
-		para.appendChild(node);
-		const element = document.getElementById("messageContainer");
-		element.appendChild(para);
-		
-	}
+	
 })
 
 ws.addEventListener("close", () => {
