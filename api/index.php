@@ -60,6 +60,7 @@ include 'online.php';
             font-family: Arial, sans-serif;
             background-image: url('../assets/background.jpg');
             background-repeat: no-repeat;
+            background-size: cover;
             margin: 0;
             padding: 0;
             display: flex;
