@@ -148,7 +148,7 @@ if (isset($_GET["action"]) && $_GET["action"] === "fetch") {
                 container.scrollTop = container.scrollHeight;
             }
         })
-        .catch(error => console.error('Error fetching messages:', error));
+        //.catch(error => console.error('Error fetching messages:', error));
 }
 
 // Fetch messages every 5 seconds
