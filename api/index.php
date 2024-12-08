@@ -1,7 +1,7 @@
 
 <?php
 // Read cookies and display them as JSON
-header("Content-Type: application/json");
+//header("Content-Type: application/json");
 
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelID = $_COOKIE['channelID'] ?? '';
