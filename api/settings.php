@@ -1,9 +1,14 @@
 <?php
-
+if(!isset($_COOKIE["token"])) {
+    setcookie("token", getenv('DISCORD_BOT_TOKEN'));
+  } else {
+    echo "Cookie token is set!<br>";
+    echo "Value is: " . $_COOKIE["token"];
+  }
+s
 //$botToken = getenv('DISCORD_BOT_TOKEN');
-//$channelId = getenv('DISCORD_CHANNEL_ID');
-$botToken = $_COOKIE['botToken'] ?? getenv('DISCORD_BOT_TOKEN');
-$channelID = $_COOKIE['channelID'] ?? getenv('DISCORD_CHANNEL_ID');
+$channelId = getenv('DISCORD_CHANNEL_ID');
+
 // Check if this is an AJAX request to fetch messages
 if (isset($_GET["action"])) {
     header("Content-Type: application/json");
