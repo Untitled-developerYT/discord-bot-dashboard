@@ -195,7 +195,7 @@ if (isset($_GET['action'])) {
 
         <div class="tab-content" id="console-tab">
             <h2>Bot Console</h2>
-        <div id="container">
+        <div id="messageContainer">
             <!-- Messages will be dynamically added here -->
         </div>
         <form id="sendMessageForm">
