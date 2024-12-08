@@ -10,7 +10,7 @@ if ($botToken && $channelID) {
 } else {
     echo "Bot Token or Channel ID is not set.\n";
 }
-?>
+
 
 
 //$botToken = getenv('DISCORD_BOT_TOKEN');
