@@ -257,13 +257,13 @@ if (isset($_GET['action'])) {
 
 
         function fetchChannels() {
-    fetch('?action=channels')
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                console.error('Error fetching channels:', data.error);
-                return;
-            }
+              fetch('?action=channels')
+              .then(response => response.json())
+              .then(data => {
+                if (data.error) {
+                  console.error('Error fetching channels:', data.error);
+                  return;
+        }
 
             // Display channels in the console or use them in the UI
             console.log('Channels:', data);
