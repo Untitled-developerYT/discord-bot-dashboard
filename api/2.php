@@ -74,18 +74,19 @@ if (isset($_GET['action'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Bot Settings</title>
+    <title>Discord Bot</title>
 </head>
 <body>
     <h1>Discord Bot Settings</h1>
-    <form method="POST">
+    <form class="w3-container" method="POST">
         <label for="botToken">Bot Token:</label><br>
-        <input type="text" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
+        <input class="w3-input" type="text" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
         <label for="channelID">Channel ID:</label><br>
-        <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
-        <button type="submit" name="updateSettings">Save Settings</button>
+        <input class="w3-input" type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
+        <button class="w3-button w3-black" type="submit" name="updateSettings">Save Settings</button>
     </form>
 
     <h2>Actions</h2>
