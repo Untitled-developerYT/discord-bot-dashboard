@@ -1,63 +1,71 @@
 <?php
+// Handle settings update via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
+    setcookie('botToken', $_POST['botToken'], time() + (86400 * 30), '/');
+    setcookie('channelID', $_POST['channelID'], time() + (86400 * 30), '/');
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
 // Read cookies into variables
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelId = $_COOKIE['channelID'] ?? '';
 
-// Use the variables in your PHP code
-
-
-
-//$botToken = getenv('DISCORD_BOT_TOKEN');
-$channelId = getenv('DISCORD_CHANNEL_ID');
-
-if ($botToken && $channelId) {
-    echo "Bot Token: $botToken\n";
-    echo "Channel ID: $channelId\n";
-} else {
-    echo "Bot Token or Channel ID is not set.\n";
-}
-
-// Check if this is an AJAX request to fetch messages
-if (isset($_GET["action"])) {
+if (isset($_GET['action'])) {
     header("Content-Type: application/json");
 
-    if ($_GET["action"] === "fetch") {
-        // Fetch messages from Discord
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bot $botToken",
-                "Content-Type: application/json",
-            ],
-        ]);
+    if ($botToken && $channelId) {
+        if ($_GET['action'] === 'fetch') {
+            // Fetch messages from Discord
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: Bot $botToken",
+                    "Content-Type: application/json",
+                ],
+            ]);
 
-        $response = curl_exec($curl);
-        curl_close($curl);
+            $response = curl_exec($curl);
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            curl_close($curl);
 
-        echo $response;
-        exit();
-    } elseif ($_GET["action"] === "send") {
-        // Send a message to Discord
-        $message = json_encode(["content" => $_POST["message"]]);
+            if ($httpCode === 200) {
+                echo $response;
+            } else {
+                echo json_encode(["error" => "Failed to fetch messages", "status" => $httpCode]);
+            }
+            exit();
+        } elseif ($_GET['action'] === 'send') {
+            // Send a message to Discord
+            $message = json_encode(["content" => $_POST['message']]);
 
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $message,
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bot $botToken",
-                "Content-Type: application/json",
-            ],
-        ]);
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $message,
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: Bot $botToken",
+                    "Content-Type: application/json",
+                ],
+            ]);
 
-        $response = curl_exec($curl);
-        curl_close($curl);
+            $response = curl_exec($curl);
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            curl_close($curl);
 
-        echo $response;
+            if ($httpCode === 200 || $httpCode === 201) {
+                echo $response;
+            } else {
+                echo json_encode(["error" => "Failed to send message", "status" => $httpCode]);
+            }
+            exit();
+        }
+    } else {
+        echo json_encode(["error" => "Bot token or channel ID not set."]);
         exit();
     }
 }
@@ -83,8 +91,8 @@ if (isset($_GET["action"])) {
             height: 100vh;
         }
 
-        .chat-container {
-            width: 400px;
+        .container {
+            width: 800px;
             background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
@@ -136,6 +144,13 @@ if (isset($_GET["action"])) {
             border-radius: 5px;
             cursor: pointer;
         }
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #333;
+}
 
         form button:hover {
             background-color: #0056b3;
@@ -143,7 +158,17 @@ if (isset($_GET["action"])) {
     </style>
 </head>
 <body>
-<div class="chat-container">
+
+<div class="container">
+
+<form method="POST">
+        <label for="botToken">Bot Token:</label><br>
+        <input type="text" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
+        <label for="channelID">Channel ID:</label><br>
+        <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
+        <button type="submit" name="updateSettings">Save Settings</button>
+   </form>
+
         <div id="messageContainer">
 
             <!-- Messages will be dynamically added here -->
