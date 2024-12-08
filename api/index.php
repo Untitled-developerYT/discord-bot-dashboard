@@ -1,13 +1,16 @@
-
 <?php
-// Read cookies and display them as JSON
-//header("Content-Type: application/json");
-
+// Read cookies into variables
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelID = $_COOKIE['channelID'] ?? '';
 
-
-    //'channelID' => $channelID,
+// Use the variables in your PHP code
+if ($botToken && $channelID) {
+    echo "Bot Token: $botToken\n";
+    echo "Channel ID: $channelID\n";
+} else {
+    echo "Bot Token or Channel ID is not set.\n";
+}
+?>
 
 
 //$botToken = getenv('DISCORD_BOT_TOKEN');
