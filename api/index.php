@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
 // Read cookies into variables
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelId = $_COOKIE['channelID'] ?? '';
-$guildId = $_COOKIE['guildID'] ?? '';
+$guildId = $_COOKIE['guildID'] ?? '1277599930621366312';
 
 if (isset($_GET['action'])) {
     header("Content-Type: application/json");
