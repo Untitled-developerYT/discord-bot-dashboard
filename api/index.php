@@ -137,7 +137,7 @@ include 'online.php';
             <input type="text" id="messageInput" placeholder="Type a message..." required>
             <button type="submit">Send</button>
         </form>
-    </div>
+</div>
     <script>
         const messageContainer = document.getElementById("messageContainer");
         const messageForm = document.getElementById("sendMessageForm");
