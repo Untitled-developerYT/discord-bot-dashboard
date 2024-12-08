@@ -10,12 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
 // Read cookies into variables
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelId = $_COOKIE['channelID'] ?? '';
-//$guildId = $_COOKIE['guildID'] ?? '1277599930621366312';
-//$guildId = "1277599930621366312";
+
 if (isset($_GET['action'])) {
     header("Content-Type: application/json");
- 
-    }
+
     if ($botToken && $channelId) {
         if ($_GET['action'] === 'fetch') {
             // Fetch messages from Discord
@@ -175,7 +173,6 @@ if (isset($_GET['action'])) {
 
             <!-- Messages will be dynamically added here -->
         </div>
-        
         <form id="sendMessageForm">
             <input type="text" id="messageInput" placeholder="Type a message..." required>
             <button type="submit">Send</button>
@@ -202,8 +199,6 @@ if (isset($_GET['action'])) {
         }
 
         // Function to send a message
-        
-
         function sendMessage(content) {
             const formData = new FormData();
             formData.append("message", content);
@@ -230,14 +225,8 @@ if (isset($_GET['action'])) {
             }
         });
 
-
-
-// Call the function to fetch channels
-        
-
         // Fetch messages every 5 seconds
         setInterval(fetchMessages, 5000);
-        fetchChannels();
         fetchMessages(); // Initial fetch
     </script>
 </body>
