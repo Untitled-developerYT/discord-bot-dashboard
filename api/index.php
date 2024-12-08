@@ -14,7 +14,7 @@ $channelId = $_COOKIE['channelID'] ?? '';
 $guildId = "1277599930621366312";
 if (isset($_GET['action'])) {
     header("Content-Type: application/json");
-    if ($_GET['action'] === 'channels') {
+    if (false) {
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => "https://discord.com/api/v10/guilds/$guildId/channels",
