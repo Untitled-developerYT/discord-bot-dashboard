@@ -11,32 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelId = $_COOKIE['channelID'] ?? '';
 //$guildId = $_COOKIE['guildID'] ?? '1277599930621366312';
-$guildId = "1277599930621366312";
+//$guildId = "1277599930621366312";
 if (isset($_GET['action'])) {
     header("Content-Type: application/json");
-    if ($_GET['action'] === 'channels') {
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "https://discord.com/api/v10/guilds/$guildId/channels",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bot $botToken",
-                "Content-Type: application/json",
-            ],
-        ]);
-    
-        $response = curl_exec($curl);
-        $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-    
-        if ($httpStatus !== 200) {
-            echo json_encode(['error' => 'Failed to fetch channels', 'status' => $httpStatus]);
-            exit();
-        }
-    
-        echo $response;
-        exit();
-    }
+ 
     }
     if ($botToken && $channelId) {
         if ($_GET['action'] === 'fetch') {
@@ -256,29 +234,6 @@ if (isset($_GET['action'])) {
         });
 
 
-        function fetchChannels() {
-              fetch('?action=channels')
-              .then(response => response.json())
-              .then(data => {
-                if (data.error) {
-                  console.error('Error fetching channels:', data.error);
-                  return;
-        }
-
-            // Display channels in the console or use them in the UI
-            console.log('Channels:', data);
-
-            // Example: Display in an HTML container
-            const channelContainer = document.getElementById('channelContainer');
-            channelContainer.innerHTML = ''; // Clear previous channels
-            data.forEach(channel => {
-                const div = document.createElement('div');
-                div.textContent = `${channel.name} (${channel.type})`;
-                channelContainer.appendChild(div);
-            });
-        })
-        .catch(error => console.error('Error:', error));
-}
 
 // Call the function to fetch channels
         
