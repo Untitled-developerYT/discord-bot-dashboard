@@ -4,6 +4,12 @@ $botToken = $_COOKIE['botToken'] ?? '';
 $channelID = $_COOKIE['channelID'] ?? '';
 
 // Use the variables in your PHP code
+
+
+
+//$botToken = getenv('DISCORD_BOT_TOKEN');
+$channelId = getenv('DISCORD_CHANNEL_ID');
+
 if ($botToken && $channelID) {
     echo "Bot Token: $botToken\n";
     echo "Channel ID: $channelID\n";
@@ -11,10 +17,6 @@ if ($botToken && $channelID) {
     echo "Bot Token or Channel ID is not set.\n";
 }
 
-
-
-//$botToken = getenv('DISCORD_BOT_TOKEN');
-$channelId = getenv('DISCORD_CHANNEL_ID');
 // Check if this is an AJAX request to fetch messages
 if (isset($_GET["action"])) {
     header("Content-Type: application/json");
