@@ -1,7 +1,7 @@
 <?php
 // Read cookies into variables
 $botToken = $_COOKIE['botToken'] ?? '';
-$channelID = $_COOKIE['channelID'] ?? '';
+$channelId = $_COOKIE['channelID'] ?? '';
 
 // Use the variables in your PHP code
 
