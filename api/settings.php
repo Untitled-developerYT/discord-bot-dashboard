@@ -1,4 +1,6 @@
 <?php
+$botToken = $_COOKIE['botToken'] ?? '';
+$channelID = $_COOKIE['channelID'] ?? '';
 // Handle AJAX requests to retrieve and update token/channel settings
 if (isset($_GET['action'])) {
     if ($_GET['action'] === 'getSettings') {
@@ -37,6 +39,7 @@ if (isset($_GET['action'])) {
         exit();
     } elseif ($_GET["action"] === "send" && isset($botToken) && isset($channelID)) {
         // Send a message to Discord
+
         $message = json_encode(["content" => $_POST["message"]]);
 
         $curl = curl_init();
