@@ -285,7 +285,7 @@ if (isset($_GET['action'])) {
 
         // Fetch messages every 5 seconds
         setInterval(fetchMessages, 5000);
-        fetchChannels();
+        //fetchChannels();
         fetchMessages(); // Initial fetch
     </script>
 </body>
