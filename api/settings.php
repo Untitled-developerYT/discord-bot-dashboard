@@ -2,8 +2,8 @@
 
 //$botToken = getenv('DISCORD_BOT_TOKEN');
 //$channelId = getenv('DISCORD_CHANNEL_ID');
-$botToken = $_COOKIE['botToken'] ?? '';
-$channelID = $_COOKIE['channelID'] ?? '';
+$botToken = $_COOKIE['botToken'] ?? getenv('DISCORD_BOT_TOKEN');
+$channelID = $_COOKIE['channelID'] ?? getenv('DISCORD_CHANNEL_ID');
 // Check if this is an AJAX request to fetch messages
 if (isset($_GET["action"])) {
     header("Content-Type: application/json");
