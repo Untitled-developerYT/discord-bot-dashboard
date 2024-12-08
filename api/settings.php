@@ -21,6 +21,8 @@ if (isset($_GET['action'])) {
     }
 
     elseif ($_GET["action"] === "fetch") {
+        header("Content-Type: application/json");
+
         // Fetch messages from Discord
         $botToken = $_COOKIE['botToken'] ?? '';
         $channelID = $_COOKIE['channelID'] ?? '';
