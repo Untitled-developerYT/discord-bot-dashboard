@@ -222,6 +222,10 @@ if (isset($_GET['action'])) {
         // Fetch messages every 5 seconds
         setInterval(fetchMessages, 5000);
         fetchMessages(); // Initial fetch
+
+
+
+        
         // Tab functionality
         document.querySelectorAll(".tab").forEach(tab => {
             tab.addEventListener("click", () => {
@@ -260,18 +264,6 @@ if (isset($_GET['action'])) {
                 })
                 .catch(console.error);
         });
-
-        // Connect to Discord Gateway
-        fetch("?action=getSettings")
-            .then(response => response.json())
-            .then(data => {
-                const token = data.botToken;
-                if (!token) {
-                    document.getElementById("consoleOutput").textContent = "Error: No bot token set.";
-                    return;
-                }
-
-                
     </script>
 </body>
 </html>
