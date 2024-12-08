@@ -109,14 +109,45 @@ if (isset($_GET['action'])) {
         p strong {
             color: #007bff;
         }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
 
-        form {
+        .tab {
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            background-color: #f9f9f9;
+        }
+
+        .tab.active {
+            background-color: #ffffff;
+            border-bottom: 1px solid white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form {
             display: flex;
             padding: 10px;
             background-color: #f1f1f1;
         }
+        .form label {
+            display: block;
+            margin-bottom: 5px;
+        }
 
-        form input {
+        .form input {
             flex: 1;
             padding: 10px;
             border: 1px solid #ddd;
@@ -124,17 +155,21 @@ if (isset($_GET['action'])) {
             margin-right: 10px;
         }
 
-        form button {
+        .btn {
             padding: 10px 15px;
             background-color: #007bff;
-            border: none;
             color: white;
+            border: none;
             border-radius: 5px;
             cursor: pointer;
         }
 
-        form button:hover {
+        .btn:hover {
             background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -165,7 +200,7 @@ if (isset($_GET['action'])) {
             <!-- Messages will be dynamically added here -->
         </div>
         <form id="sendMessageForm">
-            <input type="text" id="messageInput" placeholder="Type a message..." required>
+            <input type="text" id="input" placeholder="Type a message..." required>
             <button type="submit">Send</button>
         </form>
         </div>
