@@ -163,7 +163,7 @@ if (isset($_GET['action'])) {
 
 <form method="POST">
         <label for="botToken">Bot Token:</label><br>
-        <input type="text" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
+        <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
         <label for="channelID">Channel ID:</label><br>
         <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
         <button type="submit" name="updateSettings">Save Settings</button>
