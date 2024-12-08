@@ -79,7 +79,7 @@ if (isset($_GET['action'])) {
             height: 100vh;
         }
 
-        .chat-container {
+        .container {
             width: 400px;
             background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -160,7 +160,7 @@ if (isset($_GET['action'])) {
 
         <div class="tab-content" id="console-tab">
             <h2>Bot Console</h2>
-            <div class="chat-container">
+            <div class="container">
         <div id="messageContainer">
             <!-- Messages will be dynamically added here -->
         </div>
@@ -225,7 +225,7 @@ if (isset($_GET['action'])) {
 
 
 
-        
+
         // Tab functionality
         document.querySelectorAll(".tab").forEach(tab => {
             tab.addEventListener("click", () => {
