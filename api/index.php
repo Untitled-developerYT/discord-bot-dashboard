@@ -175,10 +175,7 @@ if (isset($_GET['action'])) {
 
             <!-- Messages will be dynamically added here -->
         </div>
-        <div id="channelContainer">
-
-            <!-- Messages will be dynamically added here -->
-        </div>
+        
         <form id="sendMessageForm">
             <input type="text" id="messageInput" placeholder="Type a message..." required>
             <button type="submit">Send</button>
