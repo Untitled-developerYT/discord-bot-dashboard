@@ -90,7 +90,6 @@ if (isset($_GET['action'])) {
 
         <div class="tab-content" id="console-tab">
             <h2>Bot Console</h2>
-            <pre id="consoleOutput">Connecting...</pre>
             <div class="chat-container">
         <div id="messageContainer">
             <!-- Messages will be dynamically added here -->
@@ -153,44 +152,7 @@ if (isset($_GET['action'])) {
                     return;
                 }
 
-                const ws = new WebSocket("wss://gateway.discord.gg/?v=10&encoding=json");
-
-                ws.addEventListener("open", () => {
-                    ws.send(JSON.stringify({
-                        op: 2,
-                        d: {
-                            token: token,
-                            intents: 0,
-                            properties: {
-                                $os: "linux",
-                                $browser: "chrome",
-                                $device: "chrome"
-                            },
-                            presence: {
-                                activities: [{
-                                    name: "I'm watching you",
-                                    type: 0
-                                }],
-                                status: "dnd",
-                                afk: false
-                            }
-                        }
-                    }));
-                    document.getElementById("consoleOutput").textContent = "Bot connected and status set.";
-                });
-
-                ws.addEventListener("message", event => {
-                    const payload = JSON.parse(event.data);
-                    if (payload.op === 10) {
-                        setInterval(() => ws.send(JSON.stringify({ op: 1, d: null })), payload.d.heartbeat_interval);
-                    }
-                });
-
-                ws.addEventListener("close", () => {
-                    document.getElementById("consoleOutput").textContent = "WebSocket connection closed.";
-                });
-            })
-            .catch(console.error);
+                
     </script>
 </body>
 </html>
