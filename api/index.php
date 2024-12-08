@@ -114,10 +114,10 @@ if (isset($_GET['action'])) {
         }
         form input {
             flex: 1;
-            padding: 10px;
+            padding: 1px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-right: 10px;
+            border-radius: 1px;
+            margin-right: 2px;
         }
         form button {
             padding: 10px 15px;
