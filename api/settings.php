@@ -80,6 +80,75 @@ if (isset($_GET['action'])) {
         }
 
         .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            background-color: #f9f9f9;
+        }
+
+        .tab.active {
+            background-color: #ffffff;
+            border-bottom: 1px solid white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+        .chat-container {
             width: 400px;
             background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -109,45 +178,14 @@ if (isset($_GET['action'])) {
         p strong {
             color: #007bff;
         }
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
 
-        .tab {
-            cursor: pointer;
-            padding: 10px 20px;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 10px 10px 0 0;
-            background-color: #f9f9f9;
-        }
-
-        .tab.active {
-            background-color: #ffffff;
-            border-bottom: 1px solid white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .form {
+        form {
             display: flex;
             padding: 10px;
             background-color: #f1f1f1;
         }
-        .form label {
-            display: block;
-            margin-bottom: 5px;
-        }
 
-        .form input {
+        form input {
             flex: 1;
             padding: 10px;
             border: 1px solid #ddd;
@@ -155,30 +193,30 @@ if (isset($_GET['action'])) {
             margin-right: 10px;
         }
 
-        .btn {
+        form button {
             padding: 10px 15px;
             background-color: #007bff;
-            color: white;
             border: none;
+            color: white;
             border-radius: 5px;
             cursor: pointer;
         }
 
-        .btn:hover {
+        form button:hover {
             background-color: #0056b3;
         }
-
-        .hidden {
-            display: none;
-        }
-    </style>
+        </style>
 </head>
 <body>
-    <div class="container">
-        <div class="tabs">
-            <div class="tab active" data-tab="settings">Settings</div>
-            <div class="tab" data-tab="console">Console</div>
+<div class="chat-container">
+        <div id="messageContainer">
+            <!-- Messages will be dynamically added here -->
         </div>
+        <form id="sendMessageForm">
+            <input type="text" id="messageInput" placeholder="Type a message..." required>
+            <button type="submit">Send</button>
+        </form>
+</div>
 
         <div class="tab-content active" id="settings-tab">
             <h2>Bot Settings</h2>
