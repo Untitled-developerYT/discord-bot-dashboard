@@ -1,6 +1,16 @@
-<?php
 
-$botToken = getenv('DISCORD_BOT_TOKEN');
+<?php
+// Read cookies and display them as JSON
+header("Content-Type: application/json");
+
+$botToken = $_COOKIE['botToken'] ?? '';
+$channelID = $_COOKIE['channelID'] ?? '';
+
+
+    //'channelID' => $channelID,
+
+
+//$botToken = getenv('DISCORD_BOT_TOKEN');
 $channelId = getenv('DISCORD_CHANNEL_ID');
 // Check if this is an AJAX request to fetch messages
 if (isset($_GET["action"])) {
@@ -131,6 +141,7 @@ include 'online.php';
 <body>
 <div class="chat-container">
         <div id="messageContainer">
+
             <!-- Messages will be dynamically added here -->
         </div>
         <form id="sendMessageForm">
