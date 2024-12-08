@@ -256,31 +256,6 @@ if (isset($_GET['action'])) {
         });
 
 
-        function fetchChannels() {
-              fetch('?action=channels')
-              .then(response => response.json())
-              .then(data => {
-                if (data.error) {
-                  console.error('Error fetching channels:', data.error);
-                  return;
-        }
-
-            // Display channels in the console or use them in the UI
-            console.log('Channels:', data);
-
-            // Example: Display in an HTML container
-            const channelContainer = document.getElementById('channelContainer');
-            channelContainer.innerHTML = ''; // Clear previous channels
-            data.forEach(channel => {
-                const div = document.createElement('div');
-                div.textContent = `${channel.name} (${channel.type})`;
-                channelContainer.appendChild(div);
-            });
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-// Call the function to fetch channels
         
 
         // Fetch messages every 5 seconds
