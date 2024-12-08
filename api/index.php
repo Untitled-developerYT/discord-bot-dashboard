@@ -1,6 +1,7 @@
 
 <?php
 // Read cookies and display them as JSON
+header("Content-Type: application/json");
 
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelID = $_COOKIE['channelID'] ?? '';
@@ -58,7 +59,7 @@ if (isset($_GET["action"])) {
 include 'online.php';
 ?>
 
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
