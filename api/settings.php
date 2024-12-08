@@ -20,8 +20,10 @@ if (isset($_GET['action'])) {
         exit();
     }
 
-    elseif ($_GET["action"] === "fetch" && isset($botToken) && isset($channelID)) {
+    elseif ($_GET["action"] === "fetch") {
         // Fetch messages from Discord
+        $botToken = $_COOKIE['botToken'] ?? '';
+        $channelID = $_COOKIE['channelID'] ?? '';
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
@@ -37,9 +39,10 @@ if (isset($_GET['action'])) {
 
         echo $response;
         exit();
-    } elseif ($_GET["action"] === "send" && isset($botToken) && isset($channelID)) {
+    } elseif ($_GET["action"] === "send") {
         // Send a message to Discord
-
+        $botToken = $_COOKIE['botToken'] ?? '';
+        $channelID = $_COOKIE['channelID'] ?? '';
         $message = json_encode(["content" => $_POST["message"]]);
 
         $curl = curl_init();
