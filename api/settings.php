@@ -17,95 +17,58 @@ if (isset($_GET['action'])) {
         echo json_encode(['success' => true]);
         exit();
     }
+
+    elseif ($_GET["action"] === "fetch" && isset($botToken) && isset($channelID)) {
+        // Fetch messages from Discord
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bot $botToken",
+                "Content-Type: application/json",
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        echo $response;
+        exit();
+    } elseif ($_GET["action"] === "send" && isset($botToken) && isset($channelID)) {
+        // Send a message to Discord
+        $message = json_encode(["content" => $_POST["message"]]);
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $message,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bot $botToken",
+                "Content-Type: application/json",
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        echo $response;
+        exit();
+    }
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot Settings</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f8;
-        }
 
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
 
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
 
-        .tab {
-            cursor: pointer;
-            padding: 10px 20px;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 10px 10px 0 0;
-            background-color: #f9f9f9;
-        }
 
-        .tab.active {
-            background-color: #ffffff;
-            border-bottom: 1px solid white;
-        }
 
-        .tab-content {
-            display: none;
-        }
 
-        .tab-content.active {
-            display: block;
-        }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
 
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
-</head>
-<body>
     <div class="container">
         <div class="tabs">
             <div class="tab active" data-tab="settings">Settings</div>
@@ -128,6 +91,15 @@ if (isset($_GET['action'])) {
         <div class="tab-content" id="console-tab">
             <h2>Bot Console</h2>
             <pre id="consoleOutput">Connecting...</pre>
+            <div class="chat-container">
+        <div id="messageContainer">
+            <!-- Messages will be dynamically added here -->
+        </div>
+        <form id="sendMessageForm">
+            <input type="text" id="messageInput" placeholder="Type a message..." required>
+            <button type="submit">Send</button>
+        </form>
+        </div>
         </div>
     </div>
 
