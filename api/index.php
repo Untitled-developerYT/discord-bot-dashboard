@@ -78,20 +78,18 @@ if (isset($_GET['action'])) {
             height: 100vh;
         }
         .container {
+          display: flex;
+            flex-direction: column;
+            height: 100vh;
             width: 800px;
+            max-width: 100%;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
         #messageContainer {
-            padding: 20px;
-            max-height: 400px;
+            flex: 1;
             overflow-y: auto;
-            display: flex;
-            flex-direction: column-reverse;
+            padding: 20px;
             background-color: #fafafa;
         }
         p {
@@ -106,18 +104,20 @@ if (isset($_GET['action'])) {
         }
         form {
             display: flex;
+            flex-shrink: 0;
+            padding: 10px;
+            gap: 10px; /* Add spacing between items */
             align-items: center;
             justify-content: space-between;
-            padding: 10px;
             background-color: #f1f1f1;
             box-sizing: border-box;
         }
         form input {
             flex: 1;
-            padding: 1px;
+            padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 1px;
-            margin-right: 2px;
+            border-radius: 5px;
+            margin-right: 5px;
         }
         form button {
             padding: 10px 15px;
@@ -126,6 +126,7 @@ if (isset($_GET['action'])) {
             color: #fff;
             border-radius: 5px;
             cursor: pointer;
+            white-space: nowrap;
         }
         form button:hover {
             background-color: #0056b3;
@@ -135,6 +136,17 @@ if (isset($_GET['action'])) {
             font-weight: bold;
             margin-bottom: 5px;
             color: #333;
+        }
+        @media (max-width: 600px) {
+            form {
+                flex-direction: column; /* Switch to vertical layout */
+                align-items: stretch; /* Make inputs take full width */
+            }
+
+            form input,
+            form button {
+                width: 100%; /* Full width for both input and button */
+            }
         }
     </style>
 </head>
