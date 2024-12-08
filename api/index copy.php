@@ -91,8 +91,8 @@ if (isset($_GET['action'])) {
             height: 100vh;
         }
 
-        .chat-container {
-            width: 400px;
+        .container {
+            width: 800px;
             background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
@@ -152,7 +152,7 @@ if (isset($_GET['action'])) {
 </head>
 <body>
 
-<div class="chat-container">
+<div class="container">
 
 <form method="POST">
         <label for="botToken">Bot Token:</label><br>
