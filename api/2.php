@@ -1,20 +1,71 @@
 <?php
-// Handle AJAX requests to retrieve and update token/channel settings
+// Handle settings update via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
+    setcookie('botToken', $_POST['botToken'], time() + (86400 * 30), '/');
+    setcookie('channelID', $_POST['channelID'], time() + (86400 * 30), '/');
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+// Read cookies into variables
+$botToken = $_COOKIE['botToken'] ?? '';
+$channelId = $_COOKIE['channelID'] ?? '';
+
 if (isset($_GET['action'])) {
-    if ($_GET['action'] === 'getSettings') {
-        // Read user settings from cookies
-        $botToken = $_COOKIE['botToken'] ?? '';
-        $channelID = $_COOKIE['channelID'] ?? '';
-        header("Content-Type: application/json");
-        echo json_encode(['botToken' => $botToken, 'channelID' => $channelID]);
-        exit();
-    } elseif ($_GET['action'] === 'saveSettings') {
-        // Save user settings to cookies
-        $botToken = $_POST['botToken'] ?? '';
-        $channelID = $_POST['channelID'] ?? '';
-        setcookie("botToken", $botToken, time() + (86400 * 30), "/"); // Save for 30 days
-        setcookie("channelID", $channelID, time() + (86400 * 30), "/");
-        echo json_encode(['success' => true]);
+    header("Content-Type: application/json");
+
+    if ($botToken && $channelId) {
+        if ($_GET['action'] === 'fetch') {
+            // Fetch messages from Discord
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: Bot $botToken",
+                    "Content-Type: application/json",
+                ],
+            ]);
+
+            $response = curl_exec($curl);
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            curl_close($curl);
+
+            if ($httpCode === 200) {
+                echo $response;
+            } else {
+                echo json_encode(["error" => "Failed to fetch messages", "status" => $httpCode]);
+            }
+            exit();
+        } elseif ($_GET['action'] === 'send') {
+            // Send a message to Discord
+            $message = json_encode(["content" => $_POST['message']]);
+
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $message,
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: Bot $botToken",
+                    "Content-Type: application/json",
+                ],
+            ]);
+
+            $response = curl_exec($curl);
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            curl_close($curl);
+
+            if ($httpCode === 200 || $httpCode === 201) {
+                echo $response;
+            } else {
+                echo json_encode(["error" => "Failed to send message", "status" => $httpCode]);
+            }
+            exit();
+        }
+    } else {
+        echo json_encode(["error" => "Bot token or channel ID not set."]);
         exit();
     }
 }
@@ -25,84 +76,76 @@ if (isset($_GET['action'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot Settings</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f8;
+    <title>Discord Bot Settings</title>
+</head>
+<body>
+    <h1>Discord Bot Settings</h1>
+    <form method="POST">
+        <label for="botToken">Bot Token:</label><br>
+        <input type="text" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
+        <label for="channelID">Channel ID:</label><br>
+        <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
+        <button type="submit" name="updateSettings">Save Settings</button>
+    </form>
+
+    <h2>Actions</h2>
+    <form id="sendMessageForm">
+        <input type="text" id="messageInput" placeholder="Type a message..." required>
+        <button type="submit">Send Message</button>
+    </form>
+
+    <div id="messageContainer"></div>
+
+    <script>
+        const messageContainer = document.getElementById("messageContainer");
+        const messageForm = document.getElementById("sendMessageForm");
+        const messageInput = document.getElementById("messageInput");
+
+        // Fetch messages from Discord
+        function fetchMessages() {
+            fetch("?action=fetch")
+                .then(response => response.json())
+                .then(data => {
+                    messageContainer.innerHTML = ""; // Clear existing messages
+                    data.forEach(message => {
+                        const p = document.createElement("p");
+                        p.textContent = `${message.author.username}: ${message.content}`;
+                        messageContainer.appendChild(p);
+                    });
+                })
+                .catch(error => console.error("Error fetching messages:", error));
         }
 
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
+        // Send a message to Discord
+        function sendMessage(content) {
+            const formData = new FormData();
+            formData.append("message", content);
+
+            fetch("?action=send", {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Message sent:", data);
+                    fetchMessages(); // Refresh messages
+                })
+                .catch(error => console.error("Error sending message:", error));
         }
 
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
+        // Handle form submission
+        messageForm.addEventListener("submit", event => {
+            event.preventDefault(); // Prevent page reload
+            const content = messageInput.value.trim();
+            if (content) {
+                sendMessage(content); // Send message
+                messageInput.value = ""; // Clear input field
+            }
+        });
 
-        .tab {
-            cursor: pointer;
-            padding: 10px 20px;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 10px 10px 0 0;
-            background-color: #f9f9f9;
-        }
-
-        .tab.active {
-            background-color: #ffffff;
-            border-bottom: 1px solid white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .hidden {
-            display: none;
-        }
- 
-
-  
+        // Fetch messages every 5 seconds
+        setInterval(fetchMessages, 5000);
+        fetchMessages(); // Initial fetch
+    </script>
+</body>
+</html>

@@ -61,7 +61,6 @@ if (isset($_GET["action"])) {
         exit();
     }
 }
-include 'online.php';
 ?>
 
 
