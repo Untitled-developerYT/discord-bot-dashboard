@@ -10,9 +10,9 @@ $channelId = $_COOKIE['channelID'] ?? '';
 //$botToken = getenv('DISCORD_BOT_TOKEN');
 $channelId = getenv('DISCORD_CHANNEL_ID');
 
-if ($botToken && $channelID) {
+if ($botToken && $channelId) {
     echo "Bot Token: $botToken\n";
-    echo "Channel ID: $channelID\n";
+    echo "Channel ID: $channelId\n";
 } else {
     echo "Bot Token or Channel ID is not set.\n";
 }
