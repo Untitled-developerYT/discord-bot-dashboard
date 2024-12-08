@@ -1,31 +1,15 @@
 <?php
+
+//$botToken = getenv('DISCORD_BOT_TOKEN');
+//$channelId = getenv('DISCORD_CHANNEL_ID');
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelID = $_COOKIE['channelID'] ?? '';
-// Handle AJAX requests to retrieve and update token/channel settings
-if (isset($_GET['action'])) {
-    if ($_GET['action'] === 'getSettings') {
-        // Read user settings from cookies
-        $botToken = $_COOKIE['botToken'] ?? '';
-        $channelID = $_COOKIE['channelID'] ?? '';
-        header("Content-Type: application/json");
-        echo json_encode(['botToken' => $botToken, 'channelID' => $channelID]);
-        exit();
-    } elseif ($_GET['action'] === 'saveSettings') {
-        // Save user settings to cookies
-        $botToken = $_POST['botToken'] ?? '';
-        $channelID = $_POST['channelID'] ?? '';
-        setcookie("botToken", $botToken, time() + (86400 * 30), "/"); // Save for 30 days
-        setcookie("channelID", $channelID, time() + (86400 * 30), "/");
-        echo json_encode(['success' => true]);
-        exit();
-    }
+// Check if this is an AJAX request to fetch messages
+if (isset($_GET["action"])) {
+    header("Content-Type: application/json");
 
-    elseif ($_GET["action"] === "fetch") {
-        header("Content-Type: application/json");
-
+    if ($_GET["action"] === "fetch") {
         // Fetch messages from Discord
-        $botToken = $_COOKIE['botToken'] ?? '';
-        $channelID = $_COOKIE['channelID'] ?? '';
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
@@ -43,8 +27,6 @@ if (isset($_GET['action'])) {
         exit();
     } elseif ($_GET["action"] === "send") {
         // Send a message to Discord
-        $botToken = $_COOKIE['botToken'] ?? '';
-        $channelID = $_COOKIE['channelID'] ?? '';
         $message = json_encode(["content" => $_POST["message"]]);
 
         $curl = curl_init();
@@ -66,7 +48,9 @@ if (isset($_GET['action'])) {
         exit();
     }
 }
+include 'online.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,75 +71,6 @@ if (isset($_GET['action'])) {
             height: 100vh;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .tab {
-            cursor: pointer;
-            padding: 10px 20px;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 10px 10px 0 0;
-            background-color: #f9f9f9;
-        }
-
-        .tab.active {
-            background-color: #ffffff;
-            border-bottom: 1px solid white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .hidden {
-            display: none;
-        }
         .chat-container {
             width: 400px;
             background-color: #ffffff;
@@ -213,7 +128,7 @@ if (isset($_GET['action'])) {
         form button:hover {
             background-color: #0056b3;
         }
-        </style>
+    </style>
 </head>
 <body>
 <div class="chat-container">
@@ -225,37 +140,11 @@ if (isset($_GET['action'])) {
             <button type="submit">Send</button>
         </form>
 </div>
-
-        <div class="tab-content active" id="settings-tab">
-            <h2>Bot Settings</h2>
-            <div class="form">
-                <label for="botToken">Bot Token</label>
-                <input type="text" id="botToken" placeholder="Enter bot token">
-            </div>
-            <div class="form">
-                <label for="channelID">Channel ID</label>
-                <input type="text" id="channelID" placeholder="Enter channel ID">
-            </div>
-            <button class="btn" id="saveSettings">Save Settings</button>
-        </div>
-
-        <div class="tab-content" id="console-tab">
-            <h2>Bot Console</h2>
-        <div id="messageContainer">
-            <!-- Messages will be dynamically added here -->
-        </div>
-        <form id="sendMessageForm">
-            <input type="text" id="input" placeholder="Type a message..." required>
-            <button class="btn" type="submit">Send</button>
-        </form>
-        </div>
-        </div>
-
     <script>
         const messageContainer = document.getElementById("messageContainer");
         const messageForm = document.getElementById("sendMessageForm");
         const messageInput = document.getElementById("messageInput");
-        
+
         // Function to fetch messages
         function fetchMessages() {
             fetch("?action=fetch")
@@ -301,48 +190,6 @@ if (isset($_GET['action'])) {
         // Fetch messages every 5 seconds
         setInterval(fetchMessages, 5000);
         fetchMessages(); // Initial fetch
-
-
-
-
-        // Tab functionality
-        document.querySelectorAll(".tab").forEach(tab => {
-            tab.addEventListener("click", () => {
-                document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-                document.querySelectorAll(".tab-content").forEach(tc => tc.classList.remove("active"));
-
-                tab.classList.add("active");
-                document.getElementById(tab.dataset.tab + "-tab").classList.add("active");
-            });
-        });
-
-        // Load settings from cookies
-        fetch("?action=getSettings")
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("botToken").value = data.botToken || '';
-                document.getElementById("channelID").value = data.channelID || '';
-            })
-            .catch(console.error);
-
-        // Save settings to cookies
-        document.getElementById("saveSettings").addEventListener("click", () => {
-            const botToken = document.getElementById("botToken").value;
-            const channelID = document.getElementById("channelID").value;
-
-            fetch("?action=saveSettings", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: `botToken=${encodeURIComponent(botToken)}&channelID=${encodeURIComponent(channelID)}`
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) alert("Settings saved successfully!");
-                })
-                .catch(console.error);
-        });
     </script>
 </body>
 </html>
