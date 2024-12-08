@@ -159,14 +159,14 @@ form button:hover {
         <label for="channelID">Channel ID:</label><br>
         <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
         <button type="submit" name="updateSettings">Save Settings</button>
-    </form>
-
+   </form>
+   <br> 
     <h2>Actions</h2>
     <form id="sendMessageForm">
         <input type="text" id="messageInput" placeholder="Type a message..." required>
         <button type="submit">Send Message</button>
     </form>
-
+    <br> 
     <div id="messageContainer"></div>
 
     <script>
