@@ -195,17 +195,15 @@ if (isset($_GET['action'])) {
 
         <div class="tab-content" id="console-tab">
             <h2>Bot Console</h2>
-            <div class="container">
-        <div id="messageContainer">
+        <div id="container">
             <!-- Messages will be dynamically added here -->
         </div>
         <form id="sendMessageForm">
             <input type="text" id="input" placeholder="Type a message..." required>
-            <button type="submit">Send</button>
+            <button class="btn" type="submit">Send</button>
         </form>
         </div>
         </div>
-    </div>
 
     <script>
         const messageContainer = document.getElementById("messageContainer");
