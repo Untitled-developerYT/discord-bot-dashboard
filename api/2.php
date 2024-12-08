@@ -153,12 +153,12 @@ form button:hover {
 </head>
 <body>
     <h1>Discord Bot Settings</h1>
-    <form class="w3-container" method="POST">
+    <form method="POST">
         <label for="botToken">Bot Token:</label><br>
-        <input class="w3-input" type="text" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
+        <input type="text" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
         <label for="channelID">Channel ID:</label><br>
-        <input class="w3-input" type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
-        <button class="w3-button w3-black" type="submit" name="updateSettings">Save Settings</button>
+        <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
+        <button type="submit" name="updateSettings">Save Settings</button>
     </form>
 
     <h2>Actions</h2>
