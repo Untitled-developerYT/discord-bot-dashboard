@@ -154,7 +154,7 @@ if (isset($_GET['action'])) {
 </head>
 <body>
 <div class="container" left="-50px">
-<iframe src="./ads.php"></iframe>
+<iframe src="./ads.html"></iframe>
 </div>
 <div class="container">
 <form method="POST">
