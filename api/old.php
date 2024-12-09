@@ -1,64 +1,69 @@
 <?php
-// Handle settings update via POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
-    setcookie('botToken', $_POST['botToken'], time() + (86400 * 30), '/');
-    setcookie('channelID', $_POST['channelID'], time() + (86400 * 30), '/');
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
-}
-
 // Read cookies into variables
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelId = $_COOKIE['channelID'] ?? '';
 
-// Handle API actions
-if (isset($_GET['action'])) {
+// Use the variables in your PHP code
+
+
+
+//$botToken = getenv('DISCORD_BOT_TOKEN');
+$channelId = getenv('DISCORD_CHANNEL_ID');
+
+if ($botToken && $channelId) {
+    echo "Bot Token: $botToken\n";
+    echo "Channel ID: $channelId\n";
+} else {
+    echo "Bot Token or Channel ID is not set.\n";
+}
+
+// Check if this is an AJAX request to fetch messages
+if (isset($_GET["action"])) {
     header("Content-Type: application/json");
 
-    if ($botToken && $channelId) {
+    if ($_GET["action"] === "fetch") {
+        // Fetch messages from Discord
         $curl = curl_init();
-
-        if ($_GET['action'] === 'fetch') {
-            // Fetch messages from Discord
-            curl_setopt_array($curl, [
-                CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HTTPHEADER => [
-                    "Authorization: Bot $botToken",
-                    "Content-Type: application/json",
-                ],
-            ]);
-        } elseif ($_GET['action'] === 'send') {
-            // Send a message to Discord
-            $message = json_encode(["content" => $_POST['message']]);
-            curl_setopt_array($curl, [
-                CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => $message,
-                CURLOPT_HTTPHEADER => [
-                    "Authorization: Bot $botToken",
-                    "Content-Type: application/json",
-                ],
-            ]);
-        }
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bot $botToken",
+                "Content-Type: application/json",
+            ],
+        ]);
 
         $response = curl_exec($curl);
-        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 
-        if (in_array($httpCode, [200, 201])) {
-            echo $response;
-        } else {
-            echo json_encode(["error" => "Failed to process request", "status" => $httpCode]);
-        }
-    } else {
-        echo json_encode(["error" => "Bot token or channel ID not set."]);
+        echo $response;
+        exit();
+    } elseif ($_GET["action"] === "send") {
+        // Send a message to Discord
+        $message = json_encode(["content" => $_POST["message"]]);
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://discord.com/api/v10/channels/$channelId/messages",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $message,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bot $botToken",
+                "Content-Type: application/json",
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        echo $response;
+        exit();
     }
-    exit();
 }
 ?>
-<!DOCTYPE html>
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -77,22 +82,26 @@ if (isset($_GET['action'])) {
             align-items: center;
             height: 100vh;
         }
-        .container {
+
+        .chat-container {
+            width: 400px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            max-width: 100%;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            justify-content: center;
         }
+
         #messageContainer {
-            flex: 1;
-            overflow-y: auto;
             padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
             flex-direction: column-reverse;
             background-color: #fafafa;
         }
+
         p {
             margin: 10px 0;
             padding: 10px;
@@ -100,70 +109,41 @@ if (isset($_GET['action'])) {
             background-color: #e0e0e0;
             word-wrap: break-word;
         }
+
         p strong {
             color: #007bff;
         }
+
         form {
             display: flex;
-            flex-shrink: 0;
             padding: 10px;
-            gap: 10px; /* Add spacing between items */
-            align-items: center;
-            justify-content: space-between;
             background-color: #f1f1f1;
-            box-sizing: border-box;
         }
+
         form input {
             flex: 1;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            margin-right: 5px;
+            margin-right: 10px;
         }
+
         form button {
             padding: 10px 15px;
             background-color: #007bff;
             border: none;
-            color: #fff;
+            color: white;
             border-radius: 5px;
             cursor: pointer;
-            white-space: nowrap;
         }
+
         form button:hover {
             background-color: #0056b3;
-        }
-        label {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        @media (max-width: 600px) {
-            form {
-                flex-direction: column; /* Switch to vertical layout */
-                align-items: stretch; /* Make inputs take full width */
-            }
-
-            form input,
-            form button {
-                width: 100%; /* Full width for both input and button */
-            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-<iframe src="https://discordapp.com/widget?id=1277599930621366312&theme=dark" height="600" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-</div>
-<div class="container">
-<form method="POST">
-        <label for="botToken">Bot Token:</label><br>
-        <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
-        <label for="channelID">Channel ID:</label><br>
-        <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
-        <button type="submit" name="updateSettings">Save Settings</button>
-   </form>
-
+<div class="chat-container">
         <div id="messageContainer">
 
             <!-- Messages will be dynamically added here -->
@@ -173,7 +153,6 @@ if (isset($_GET['action'])) {
             <button type="submit">Send</button>
         </form>
 </div>
-
     <script>
         const messageContainer = document.getElementById("messageContainer");
         const messageForm = document.getElementById("sendMessageForm");
