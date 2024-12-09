@@ -296,7 +296,7 @@ if (isset($_GET['action'])) {
                 iframe.sandbox = "allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                 adRotator.appendChild(iframe);
             }
-            sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+            
 
             // Move to the next ad, looping back to the start if needed
             currentAdIndex = (currentAdIndex + 1) % ads.length;
