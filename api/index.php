@@ -159,6 +159,7 @@ if (isset($_GET['action'])) {
         .ad-container video {
             width: 100%;
             height: 100%;
+            border: none;
             object-fit: cover; /* Ensures media scales properly */
         }
         @media (max-width: 600px) {
@@ -292,7 +293,7 @@ if (isset($_GET['action'])) {
                 iframe.src = ad.src;
                 iframe.frameBorder = "0";
                 iframe.allowFullscreen = true;
-                iframe.height = "6000"
+                iframe.height = "100%"
                 iframe.sandbox = "allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                 adRotator.appendChild(iframe);
             }
