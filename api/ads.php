@@ -32,7 +32,7 @@
     <script>
         // Define the ads: an array of objects with type and source
         const ads = [
-            { type: 'image', src: 'https://via.placeholder.com/400x300?text=Ad+1' },
+            { type: 'image', src: '../assets/background.jpg' },
             { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' },
             { type: 'iframe', src: 'https://example.com' },
             { type: 'image', src: 'https://via.placeholder.com/400x300?text=Ad+2' },
