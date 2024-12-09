@@ -142,14 +142,13 @@ if (isset($_GET['action'])) {
         .ad-container {
             width: 100%;
             max-width: 400px; /* Adjust as needed */
-            height: 300px; /* Adjust as needed */
             border: 1px solid #ddd;
             overflow: hidden;
             position: relative;
             background-color: #f4f4f4;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100%;
             max-width: 20%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
