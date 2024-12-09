@@ -168,7 +168,6 @@ if (isset($_GET['action'])) {
         .ad-container video {
             width: 100%;
             height: 100%;
-            border: none;
             object-fit: cover; /* Ensures media scales properly */
         }
         @media (max-width: 600px) {
