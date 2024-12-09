@@ -292,6 +292,7 @@ if (isset($_GET['action'])) {
                 iframe.src = ad.src;
                 iframe.frameBorder = "0";
                 iframe.allowFullscreen = true;
+                iframe.height = "600"
                 iframe.sandbox = "allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                 adRotator.appendChild(iframe);
             }
