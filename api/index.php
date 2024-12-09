@@ -141,7 +141,6 @@ if (isset($_GET['action'])) {
         }
         .ad-container {
             width: 100%;
-            max-width: 400px; /* Adjust as needed */
             border: 1px solid #ddd;
             overflow: hidden;
             position: relative;
@@ -152,6 +151,17 @@ if (isset($_GET['action'])) {
             max-width: 20%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .ad-rotator {
+            width: 100%;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            position: relative;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
         .ad-container iframe,
         .ad-container img,
@@ -159,7 +169,7 @@ if (isset($_GET['action'])) {
             width: 100%;
             height: 100%;
             border: none;
-            /*object-fit: cover; /* Ensures media scales properly */
+            object-fit: cover; /* Ensures media scales properly */
         }
         @media (max-width: 600px) {
             form {
@@ -178,7 +188,7 @@ if (isset($_GET['action'])) {
 <body>
 
 <div class="ad-container">
-    <div id="adRotator" class="ad-container"></div>
+    <div id="adRotator" class="ad-rotator"></div>
 </div>
 
 
