@@ -73,7 +73,8 @@ if (isset($_GET['action'])) {
             margin: 0;
             padding: 0;
             display: flex;
-            
+            justify-content: center;
+            align-items: center;
             height: 100vh;
         }
         .container {
@@ -81,6 +82,7 @@ if (isset($_GET['action'])) {
             flex-direction: column;
             height: 100vh;
             max-width: 80%;
+            position: relative;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -151,8 +153,8 @@ if (isset($_GET['action'])) {
     </style>
 </head>
 <body>
-<div class="container">
-<iframe src="https://discordapp.com/widget?id=1277599930621366312&theme=dark" height="600" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+<div class="container" left="-50px">
+<iframe src="./ads.php"></iframe>
 </div>
 <div class="container">
 <form method="POST">
