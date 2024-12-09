@@ -304,7 +304,7 @@ if (isset($_GET['action'])) {
 
         // Start rotating ads every 5 seconds
         displayAd(); // Display the first ad immediately
-        setInterval(displayAd, 60000); // Change ads every 5 seconds
+        setInterval(displayAd, 6000); // Change ads every 5 seconds
     </script>
 </body>
 </html>
