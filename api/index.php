@@ -150,7 +150,7 @@ if (isset($_GET['action'])) {
             display: flex;
             flex-direction: column;
             height: 100vh;
-            max-width: 10%;
+            max-width: 20%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -263,7 +263,7 @@ if (isset($_GET['action'])) {
                 const ads = [
             { type: 'image', src: '../assets/background.jpg' },
             { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-            { type: 'iframe', src: 'https://example.com' },
+            { type: 'iframe', src: 'https://discord.com/widget?id=1277599930621366312&theme=dark&username=Mrbeast' },
             { type: 'image', src: 'https://via.placeholder.com/400x300?text=Ad+2' },
         ];
 
@@ -292,8 +292,10 @@ if (isset($_GET['action'])) {
                 iframe.src = ad.src;
                 iframe.frameBorder = "0";
                 iframe.allowFullscreen = true;
+                iframe.sandbox = "allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                 adRotator.appendChild(iframe);
             }
+            sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
 
             // Move to the next ad, looping back to the start if needed
             currentAdIndex = (currentAdIndex + 1) % ads.length;
