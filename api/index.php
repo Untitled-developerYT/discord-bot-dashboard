@@ -84,6 +84,7 @@ if (isset($_GET['action'])) {
             max-width: 100%;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            align-items: center;
         }
         #messageContainer {
             flex: 1;
