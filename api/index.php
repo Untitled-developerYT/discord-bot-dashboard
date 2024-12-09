@@ -160,7 +160,7 @@ if (isset($_GET['action'])) {
             width: 100%;
             height: 100%;
             border: none;
-            object-fit: cover; /* Ensures media scales properly */
+            /*object-fit: cover; /* Ensures media scales properly */
         }
         @media (max-width: 600px) {
             form {
@@ -291,7 +291,6 @@ if (isset($_GET['action'])) {
             } else if (ad.type === "iframe") {
                 const iframe = document.createElement("iframe");
                 iframe.src = ad.src;
-                iframe.frameBorder = "0";
                 iframe.allowFullscreen = true;
                 iframe.height = "100%"
                 iframe.sandbox = "allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
