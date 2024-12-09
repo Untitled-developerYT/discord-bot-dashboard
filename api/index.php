@@ -178,7 +178,7 @@ if (isset($_GET['action'])) {
 <body>
 
 <div class="ad-container">
-    <div id="adRotator"></div>
+    <div id="adRotator" class="ad-container"></div>
 </div>
 
 
