@@ -147,6 +147,11 @@ if (isset($_GET['action'])) {
             overflow: hidden;
             position: relative;
             background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 80%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .ad-container iframe,
