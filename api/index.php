@@ -151,9 +151,10 @@ if (isset($_GET['action'])) {
     </style>
 </head>
 <body>
-
 <div class="container">
-<iframe src="https://discordapp.com/widget?id=1277599930621366312&theme=dark" width="500" height="400" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+<iframe src="https://discordapp.com/widget?id=1277599930621366312&theme=dark" width="300" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+</div>
+<div class="container">
 <form method="POST">
         <label for="botToken">Bot Token:</label><br>
         <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
@@ -171,6 +172,7 @@ if (isset($_GET['action'])) {
             <button type="submit">Send</button>
         </form>
 </div>
+
     <script>
         const messageContainer = document.getElementById("messageContainer");
         const messageForm = document.getElementById("sendMessageForm");
