@@ -270,10 +270,9 @@ if (isset($_GET['action'])) {
 // ADS
                 // Define the ads: an array of objects with type and source
                 const ads = [
-            { type: 'image', src: '../assets/background.jpg' },
-            { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-            { type: 'iframe', src: 'https://discord.com/widget?id=1277599930621366312&theme=dark&username=Mrbeast' },
-            { type: 'image', src: 'https://via.placeholder.com/400x300?text=Ad+2' },
+           /* { type: 'image', src: '../assets/background.jpg' }, */
+           /* { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' }, */
+            { type: 'iframe', src: 'https://discord.com/widget?id=1277599930621366312&theme=dark' },
         ];
 
         let currentAdIndex = 0; // Start with the first ad
