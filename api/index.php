@@ -89,6 +89,7 @@ if (isset($_GET['action'])) {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
+            display: flex;
             flex-direction: column-reverse;
             background-color: #fafafa;
         }
