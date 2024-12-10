@@ -268,7 +268,7 @@ if (isset($_GET['action'])) {
 <div class="container">
 <!-- Trigger Button -->
 <button id="openPopup">Open Popup</button>
-</div>
+
 <!-- Overlay -->
 <div class="overlay" id="popupOverlay"></div>
 
@@ -316,7 +316,7 @@ if (isset($_GET['action'])) {
 
 
 
-
+</div>
 
 
 
