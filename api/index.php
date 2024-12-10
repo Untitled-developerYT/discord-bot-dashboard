@@ -77,86 +77,6 @@ if (isset($_GET['action'])) {
             align-items: center;
             height: 100vh;
         }
-        .popup {
-            display: none; /* Initially hidden */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            z-index: 1000;
-        }
-
-        .popup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-        }
-
-        .popup-header h3 {
-            margin: 0;
-            font-size: 18px;
-        }
-
-        .popup-header button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .popup-tabs {
-            display: flex;
-            background-color: #f1f1f1;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .popup-tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            background-color: #f1f1f1;
-            border-right: 1px solid #ddd;
-            transition: background-color 0.3s ease;
-        }
-
-        .popup-tab:last-child {
-            border-right: none;
-        }
-
-        .popup-tab.active {
-            background-color: #fff;
-            font-weight: bold;
-        }
-
-        .popup-content {
-            padding: 15px;
-            display: none;
-        }
-
-        .popup-content.active {
-            display: block;
-        }
-
-        .overlay {
-            display: none; /* Initially hidden */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
         .container {
             display: flex;
             flex-direction: column;
@@ -265,32 +185,20 @@ if (isset($_GET['action'])) {
     </style>
 </head>
 <body>
-<div class="container">
-<!-- Trigger Button -->
-<button id="openPopup">Open Popup</button>
-</div>
-<!-- Overlay -->
-<div class="overlay" id="popupOverlay"></div>
 
-<div class="popup" id="popup">
-    <div class="popup-header">
-        <h3>Popup Tabs</h3>
-        <button id="closePopup">&times;</button>
-    </div>
-    <div class="popup-tabs">
-        <div class="popup-tab active" data-tab="tab1">Tab 1</div>
-        <div class="popup-tab" data-tab="tab2">Tab 2</div>
-        <div class="popup-tab" data-tab="tab3">Tab 3</div>
-    </div>
-    <div class="popup-content active" id="tab1">
-        <div class="container">
-            <form method="POST">
-                <label for="botToken">Bot Token:</label><br>
-                <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
-                <label for="channelID">Channel ID:</label><br>
-                <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
-                <button type="submit" name="updateSettings">Save Settings</button>
-            </form>
+<div class="ad-container">
+    <div id="adRotator" class="ad-rotator"></div>
+</div>
+
+
+<div class="container">
+<form method="POST">
+        <label for="botToken">Bot Token:</label><br>
+        <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
+        <label for="channelID">Channel ID:</label><br>
+        <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
+        <button type="submit" name="updateSettings">Save Settings</button>
+   </form>
 
         <div id="messageContainer">
 
@@ -300,26 +208,7 @@ if (isset($_GET['action'])) {
             <input type="text" id="messageInput" placeholder="Type a message..." required>
             <button type="submit">Send</button>
         </form>
-        </div>
-    </div>
-    <div class="popup-content" id="tab2">
-        <p>Content for Tab 2</p>
-    </div>
-    <div class="popup-content" id="tab3">
-        <div class="ad-container">
-        <div id="adRotator" class="ad-rotator"></div>
-        </div>
-    </div>
 </div>
-
-
-
-
-
-
-
-
-
 
     <script>
         const messageContainer = document.getElementById("messageContainer");
