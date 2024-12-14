@@ -3,6 +3,7 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
     setcookie('botToken', $_POST['botToken'], time() + (86400 * 30), '/');
     setcookie('channelID', $_POST['channelID'], time() + (86400 * 30), '/');
+    setcookie('guildID', $_POST['guildID'], time() + (86400 * 30), '/');
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
 }
