@@ -217,6 +217,15 @@ if (isset($_GET['action'])) {
 </div>
 <div class="container">
     <h1>Choose a Discord Channel</h1>
+    <form method="POST">
+        <label for="botToken">Bot Token:</label><br>
+        <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
+
+        <label for="guildID">Guild ID:</label><br>
+        <input type="text" id="guildID" name="guildID" value="<?= htmlspecialchars($guildId) ?>" required><br><br>
+
+        <button type="submit" name="updateSettings">Save Settings</button>
+    </form>
 
     <button id="fetchChannels">Fetch Channels</button>
     <ul class="channel-list" id="channelList"></ul>
@@ -339,15 +348,6 @@ fetchChannelsButton.addEventListener('click', () => {
     function selectChannel(channelId, channelName) {
         output.textContent = `Selected Channel: ${channelName} (ID: ${channelId})`;
         output.style.display = 'block';
-        fetch("https://jsonplaceholder.typicode.com/todos", {
-            method: "POST",
-            body: JSON.stringify({
-                channelID: ${channelId}
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            }
-        });
     }
 
 
