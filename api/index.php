@@ -313,13 +313,6 @@ async function sendData(channelId) {
   formData.append("channelID", channelId);
   formData.append("guildID", "<?= htmlspecialchars($guildId) ?>");
 
-  // Add a file
-  const selection = await window.showOpenFilePicker();
-  if (selection.length > 0) {
-    const file = await selection[0].getFile();
-    formData.append("file", file);
-  }
-
   try {
     const response = await fetch("./", {
       method: "POST",
