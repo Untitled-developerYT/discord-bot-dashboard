@@ -238,6 +238,8 @@ if (isset($_GET['action'])) {
         <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
         <label for="channelID">Channel ID:</label><br>
         <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
+        <label for="guildID">Guild ID:</label><br>
+        <input type="text" id="guildID" name="guildID" value="<?= htmlspecialchars($guildId) ?>" required><br><br>
         <button type="submit" name="updateSettings">Save Settings</button>
    </form>
 
@@ -310,7 +312,7 @@ if (isset($_GET['action'])) {
 
 
 
-        
+
 // channels---------------------------------------------------------------------------------------------------------------
 fetchChannelsButton.addEventListener('click', () => {
         fetch('?action=fetchChannels')
