@@ -388,17 +388,18 @@ fetchChannelsButton.addEventListener('click', () => {
         output.textContent = `Selected Channel: ${channelName} (ID: ${channelId})`;
         output.style.display = 'block';
         sendData(channelId);
+        fetchMessages();
     }
 
 
 
 
 
-// ADS------------------------------------------------------------------------------------------------
+/* ADS------------------------------------------------------------------------------------------------
                 // Define the ads: an array of objects with type and source
                 const ads = [
-           /* { type: 'image', src: '../assets/background.jpg' }, */
-           /* { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' }, */
+            { type: 'image', src: '../assets/background.jpg' }, 
+            { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' }, 
             { type: 'iframe', src: 'https://discord.com/widget?id=1277599930621366312&theme=dark' },
         ];
 
@@ -438,7 +439,7 @@ fetchChannelsButton.addEventListener('click', () => {
 
         // Start rotating ads every 5 seconds
         displayAd(); // Display the first ad immediately
-        setInterval(displayAd, 6000); // Change ads every 5 seconds
+        setInterval(displayAd, 6000); // Change ads every 5 seconds */
     </script>
 </body>
 </html>
