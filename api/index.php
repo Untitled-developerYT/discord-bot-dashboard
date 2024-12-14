@@ -188,6 +188,30 @@ if (isset($_GET['action'])) {
             height: 100%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .channel-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .channel-list li {
+            padding: 10px;
+            background: #f0f0f0;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .channel-list li:hover {
+            background: #ddd;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e0ffe0;
+            border: 1px solid #b0f0b0;
+            border-radius: 5px;
+            display: none;
+        }
 
         .ad-container iframe,
         .ad-container img,
