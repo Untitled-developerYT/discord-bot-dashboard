@@ -303,7 +303,37 @@ if (isset($_GET['action'])) {
 
 
 
+//-----------------------------------------------------------------test
+async function sendData(channelId) {
+  // Construct a FormData instance
+  const formData = new FormData();
 
+  // Add a text field
+  formData.append("botToken", "<?= htmlspecialchars($botToken) ?>");
+  formData.append("channelID", ${channelId});
+  formData.append("guildID", "<?= htmlspecialchars($guildID) ?>");
+
+  // Add a file
+  const selection = await window.showOpenFilePicker();
+  if (selection.length > 0) {
+    const file = await selection[0].getFile();
+    formData.append("file", file);
+  }
+
+  try {
+    const response = await fetch("./", {
+      method: "POST",
+      // Set the FormData instance as the request body
+      body: formData,
+    });
+    console.log(await response.json());
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+const send = document.querySelector("#send");
+send.addEventListener("click", sendData);
 
 
 // channels---------------------------------------------------------------------------------------------------------------
@@ -340,6 +370,7 @@ fetchChannelsButton.addEventListener('click', () => {
     function selectChannel(channelId, channelName) {
         output.textContent = `Selected Channel: ${channelName} (ID: ${channelId})`;
         output.style.display = 'block';
+        sendData(${channelId})
     }
 
 
