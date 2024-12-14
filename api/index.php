@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
 // Read cookies into variables
 $botToken = $_COOKIE['botToken'] ?? '';
 $channelId = $_COOKIE['channelID'] ?? '';
+$guildId = $_COOKIE['guildID'] ?? '';
 
 // Handle API actions
 if (isset($_GET['action'])) {
@@ -17,6 +18,30 @@ if (isset($_GET['action'])) {
 
     if ($botToken && $channelId) {
         $curl = curl_init();
+        if ($_GET['action'] === 'fetchChannels' && $guildId) {
+            // Fetch channels from Discord API
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => "https://discord.com/api/v10/guilds/$guildId/channels",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: Bot $botToken",
+                    "Content-Type: application/json",
+                ],
+            ]);
+    
+            $response = curl_exec($curl);
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            curl_close($curl);
+    
+            if ($httpCode === 200) {
+                echo $response;
+            } else {
+                echo json_encode(["error" => "Failed to fetch channels", "status" => $httpCode]);
+            }
+            exit();
+        }
+        
         
         if ($_GET['action'] === 'fetch') {
             // Fetch messages from Discord
@@ -189,7 +214,23 @@ if (isset($_GET['action'])) {
 <div class="ad-container">
     <div id="adRotator" class="ad-rotator"></div>
 </div>
+<div class="container">
+    <h1>Choose a Discord Channel</h1>
+    <form method="POST">
+        <label for="botToken">Bot Token:</label><br>
+        <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
 
+        <label for="guildID">Guild ID:</label><br>
+        <input type="text" id="guildID" name="guildID" value="<?= htmlspecialchars($guildId) ?>" required><br><br>
+
+        <button type="submit" name="updateSettings">Save Settings</button>
+    </form>
+
+    <button id="fetchChannels">Fetch Channels</button>
+    <ul class="channel-list" id="channelList"></ul>
+
+    <div class="output" id="output"></div>
+</div>
 
 <div class="container">
 <form method="POST">
@@ -215,6 +256,9 @@ if (isset($_GET['action'])) {
         const messageContainer = document.getElementById("messageContainer");
         const messageForm = document.getElementById("sendMessageForm");
         const messageInput = document.getElementById("messageInput");
+        const fetchChannelsButton = document.getElementById('fetchChannels');
+        const channelList = document.getElementById('channelList');
+        const output = document.getElementById('output');
 
         // Function to fetch messages
         function fetchMessages() {
@@ -266,9 +310,48 @@ if (isset($_GET['action'])) {
 
 
 
+        
+// channels---------------------------------------------------------------------------------------------------------------
+fetchChannelsButton.addEventListener('click', () => {
+        fetch('?action=fetchChannels')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                renderChannelList(data);
+            })
+            .catch(err => {
+                console.error("Error fetching channels:", err);
+                alert("An error occurred while fetching channels.");
+            });
+    });
+
+    // Render the channel list
+    function renderChannelList(channels) {
+        channelList.innerHTML = ''; // Clear previous channels
+        channels.forEach(channel => {
+            if (channel.type === 0) { // Only show text channels (type 0)
+                const li = document.createElement('li');
+                li.textContent = `${channel.name} (${channel.id})`;
+                li.addEventListener('click', () => selectChannel(channel.id, channel.name));
+                channelList.appendChild(li);
+            }
+        });
+    }
+
+    // Select a channel
+    function selectChannel(channelId, channelName) {
+        output.textContent = `Selected Channel: ${channelName} (ID: ${channelId})`;
+        output.style.display = 'block';
+    }
 
 
-// ADS
+
+
+
+// ADS------------------------------------------------------------------------------------------------
                 // Define the ads: an array of objects with type and source
                 const ads = [
            /* { type: 'image', src: '../assets/background.jpg' }, */
