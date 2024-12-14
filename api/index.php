@@ -162,6 +162,94 @@ if (isset($_GET['action'])) {
             height: 100%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .popup {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+            z-index: 1000;
+            max-height: 80vh;
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .popup-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .popup-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .popup-tabs {
+            display: flex;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .popup-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border-right: 1px solid #ddd;
+            transition: background-color 0.3s ease;
+        }
+
+        .popup-tab:last-child {
+            border-right: none;
+        }
+
+        .popup-tab.active {
+            background-color: #fff;
+            font-weight: bold;
+        }
+
+        .popup-content {
+            padding: 15px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .popup-content.active {
+            display: block;
+            overflow-y: auto;
+        }
+
+        .overlay {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .footer {
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 10px;
+        }
 
         .ad-container iframe,
         .ad-container img,
@@ -185,20 +273,24 @@ if (isset($_GET['action'])) {
     </style>
 </head>
 <body>
-
-<div class="ad-container">
-    <div id="adRotator" class="ad-rotator"></div>
+<div class="container">
+    <button id="openPopup" style="background: url('../assets/icon.png') no-repeat center center; background-size: cover; width: 25px; height: 25px; border: none; cursor: pointer;" aria-label="Click me"></button>
+    <div class="overlay" id="popupOverlay"></div>
 </div>
 
 
-<div class="container">
-<form method="POST">
-        <label for="botToken">Bot Token:</label><br>
-        <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
-        <label for="channelID">Channel ID:</label><br>
-        <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
-        <button type="submit" name="updateSettings">Save Settings</button>
-   </form>
+<div class="popup" id="popup">
+    <div class="popup-header">
+        <h3>Popup Tabs</h3>
+        <button id="closePopup">&times;</button>
+    </div>
+    <div class="popup-tabs">
+        <div class="popup-tab active" data-tab="tab1">Tab 1</div>
+        <div class="popup-tab" data-tab="tab2">Tab 2</div>
+        <div class="popup-tab" data-tab="tab3">Tab 3</div>
+    </div>
+    <div class="popup-content active" id="tab1">
+           
 
         <div id="messageContainer">
 
@@ -208,12 +300,68 @@ if (isset($_GET['action'])) {
             <input type="text" id="messageInput" placeholder="Type a message..." required>
             <button type="submit">Send</button>
         </form>
+    </div>
+    <div class="popup-content" id="tab2">
+        <form method="POST">
+            <label for="botToken">Bot Token:</label><br>
+            <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
+            <label for="channelID">Channel ID:</label><br>
+            <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
+            <button type="submit" name="updateSettings">Save Settings</button>
+        </form>
+    </div>
+    <div class="popup-content" id="tab3">
+        <div class="ad-container">
+            <div id="adRotator" class="ad-rotator"></div>
+        </div>
+    </div>
 </div>
+
 
     <script>
         const messageContainer = document.getElementById("messageContainer");
         const messageForm = document.getElementById("sendMessageForm");
         const messageInput = document.getElementById("messageInput");
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('popupOverlay');
+        const openButton = document.getElementById('openPopup');
+        const closeButton = document.getElementById('closePopup');
+        const tabs = document.querySelectorAll('.popup-tab');
+        const contents = document.querySelectorAll('.popup-content');
+        const messageContainer = document.getElementById("messageContainer");
+        const messageForm = document.getElementById("sendMessageForm");
+        const messageInput = document.getElementById("messageInput");
+
+        // Show Popup
+        openButton.addEventListener('click', () => {
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        });
+
+    // Close Popup
+        closeButton.addEventListener('click', () => {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
+        overlay.addEventListener('click', () => {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
+    // Tab Switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+            // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+            // Add active class to the clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+        
 
         // Function to fetch messages
         function fetchMessages() {
