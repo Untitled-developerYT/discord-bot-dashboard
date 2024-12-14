@@ -355,7 +355,7 @@ async function sendData(channelId) {
 
 
 // channels---------------------------------------------------------------------------------------------------------------
-fetchChannelsButton.addEventListener('click', () => {
+function fetchChannels() {
         fetch('?action=fetchChannels')
             .then(response => response.json())
             .then(data => {
@@ -369,7 +369,7 @@ fetchChannelsButton.addEventListener('click', () => {
                 console.error("Error fetching channels:", err);
                 alert("An error occurred while fetching channels.");
             });
-    });
+    };
 
     // Render the channel list
     function renderChannelList(channels) {
@@ -392,7 +392,8 @@ fetchChannelsButton.addEventListener('click', () => {
     }
 
 
-
+    setInterval(fetchChannels, 5000);
+    fetchChannels(); // Initial fetch
 
 
 /* ADS------------------------------------------------------------------------------------------------
