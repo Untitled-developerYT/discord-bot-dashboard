@@ -339,7 +339,7 @@ fetchChannelsButton.addEventListener('click', () => {
     function selectChannel(channelId, channelName) {
         output.textContent = `Selected Channel: ${channelName} (ID: ${channelId})`;
         output.style.display = 'block';
-        fetch("https://jsonplaceholder.typicode.com/todos", {
+        fetch("", {
             method: "POST",
             body: JSON.stringify({
                 channelID: ${channelId}
