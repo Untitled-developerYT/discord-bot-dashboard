@@ -348,6 +348,7 @@ async function sendData(channelId) {
   } catch (e) {
     console.error(e);
   }
+  fetchMessages();
 }
 
 
@@ -388,7 +389,6 @@ fetchChannelsButton.addEventListener('click', () => {
         output.textContent = `Selected Channel: ${channelName} (ID: ${channelId})`;
         output.style.display = 'block';
         sendData(channelId);
-        fetchMessages();
     }
 
 
