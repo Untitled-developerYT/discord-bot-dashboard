@@ -312,7 +312,7 @@ async function sendData(channelId) {
   formData.append("botToken", "<?= htmlspecialchars($botToken) ?>");
   formData.append("channelID", channelId);
   formData.append("guildID", "<?= htmlspecialchars($guildId) ?>");
-  formData.append("updateSettings");
+  formData.append("updateSettings", "");
 
   try {
     const response = await fetch("./", {
