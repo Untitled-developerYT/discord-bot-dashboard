@@ -111,6 +111,7 @@ if (isset($_GET['action'])) {
             position: relative;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
         }
         #messageContainer {
             flex: 1;
