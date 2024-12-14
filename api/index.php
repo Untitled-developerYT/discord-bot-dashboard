@@ -369,7 +369,7 @@ fetchChannelsButton.addEventListener('click', () => {
     function selectChannel(channelId, channelName) {
         output.textContent = `Selected Channel: ${channelName} (ID: ${channelId})`;
         output.style.display = 'block';
-        sendData(${channelId});
+        sendData(channelId);
     }
 
 
