@@ -310,8 +310,8 @@ async function sendData(channelId) {
 
   // Add a text field
   formData.append("botToken", "<?= htmlspecialchars($botToken) ?>");
-  formData.append("channelID", ${channelId});
-  formData.append("guildID", "<?= htmlspecialchars($guildID) ?>");
+  formData.append("channelID", channelId);
+  formData.append("guildID", "<?= htmlspecialchars($guildId) ?>");
 
   // Add a file
   const selection = await window.showOpenFilePicker();
