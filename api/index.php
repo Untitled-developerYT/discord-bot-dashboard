@@ -209,23 +209,7 @@ if (isset($_GET['action'])) {
             <button type="submit">Send</button>
         </form>
 </div>
-<div class="container">
-    <h1>Choose a Discord Channel</h1>
-    <form method="POST">
-        <label for="botToken">Bot Token:</label><br>
-        <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
 
-        <label for="guildID">Guild ID:</label><br>
-        <input type="text" id="guildID" name="guildID" value="<?= htmlspecialchars($guildId) ?>" required><br><br>
-
-        <button type="submit" name="updateSettings">Save Settings</button>
-    </form>
-
-    <button id="fetchChannels">Fetch Channels</button>
-    <ul class="channel-list" id="channelList"></ul>
-
-    <div class="output" id="output"></div>
-</div>
 
     <script>
         const messageContainer = document.getElementById("messageContainer");
