@@ -367,7 +367,6 @@ function fetchChannels() {
             })
             .catch(err => {
                 console.error("Error fetching channels:", err);
-                alert("An error occurred while fetching channels.");
             });
     };
 
@@ -392,7 +391,7 @@ function fetchChannels() {
     }
 
 
-    setInterval(fetchChannels, 5000);
+    setInterval(fetchChannels, 60000);
     fetchChannels(); // Initial fetch
 
 
