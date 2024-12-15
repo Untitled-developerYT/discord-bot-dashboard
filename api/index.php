@@ -165,29 +165,6 @@ if (isset($_GET['action'])) {
             margin-bottom: 5px;
             color: #333;
         }
-        .ad-container {
-            width: 100%;
-            border: 1px solid #ddd;
-            overflow: hidden;
-            position: relative;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            max-width: 20%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .ad-rotator {
-            width: 100%;
-            border: 1px solid #ddd;
-            overflow: hidden;
-            position: relative;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
         .channel-list {
             list-style-type: none;
             padding: 0;
@@ -203,22 +180,6 @@ if (isset($_GET['action'])) {
         }
         .channel-list li:hover {
             background: #ddd;
-        }
-        .output {
-            margin-top: 20px;
-            padding: 10px;
-            background: #e0ffe0;
-            border: 1px solid #b0f0b0;
-            border-radius: 5px;
-            display: none;
-        }
-
-        .ad-container iframe,
-        .ad-container img,
-        .ad-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
         }
         @media (max-width: 600px) {
             form {
@@ -239,12 +200,8 @@ if (isset($_GET['action'])) {
 
 <div class="container">
     <h1>Choose a Discord Channel</h1>
-    
-
     <button id="fetchChannels">Fetch Channels</button>
     <ul class="channel-list" id="channelList"></ul>
-
-    <div class="output" id="output"></div>
 </div>
 
 <div class="container">
@@ -383,8 +340,6 @@ function fetchChannels() {
 
     // Select a channel
     function selectChannel(channelId, channelName) {
-        output.textContent = `Selected Channel: ${channelName} (ID: ${channelId})`;
-        output.style.display = 'block';
         sendData(channelId);
     }
 
