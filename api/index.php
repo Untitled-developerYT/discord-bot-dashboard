@@ -212,6 +212,34 @@ if (isset($_GET['action'])) {
             border-radius: 5px;
             display: none;
         }
+        .tabs {
+            display: flex;
+            cursor: pointer;
+            border-bottom: 2px solid #ccc;
+        }
+        .tab {
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            margin-right: 5px;
+            background-color: #f9f9f9;
+        }
+        .tab.active {
+            background-color: #fff;
+            border-top: 2px solid #007BFF;
+            border-left: 2px solid #007BFF;
+            border-right: 2px solid #007BFF;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .tab-content.active {
+            display: block;
+        }
 
         .ad-container iframe,
         .ad-container img,
@@ -236,29 +264,29 @@ if (isset($_GET['action'])) {
 </head>
 <body>
 
-<div class="ad-container">
-    <div id="adRotator" class="ad-rotator"></div>
+
+
+<div class="tabs">
+    <div class="tab active" data-tab="1">Tab 1</div>
+    <div class="tab" data-tab="2">Tab 2</div>
+    <div class="tab" data-tab="3">Tab 3</div>
 </div>
-<div class="container">
-    <h1>Choose a Discord Channel</h1>
+
+<div class="tab-content active" id="tab-1">
+    <h2>Content for Tab 1</h2>
+    <div class="container">
+    <div class="container">
+        <h1>Choose a Discord Channel</h1>
     
 
-    <button id="fetchChannels">Fetch Channels</button>
-    <ul class="channel-list" id="channelList"></ul>
+        <button id="fetchChannels">Fetch Channels</button>
+        <ul class="channel-list" id="channelList"></ul>
 
-    <div class="output" id="output"></div>
-</div>
+        <div class="output" id="output"></div>
+    </div>
 
-<div class="container">
-<form method="POST">
-        <label for="botToken">Bot Token:</label><br>
-        <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
-        <label for="channelID">Channel ID:</label><br>
-        <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
-        <label for="guildID">Guild ID:</label><br>
-        <input type="text" id="guildID" name="guildID" value="<?= htmlspecialchars($guildId) ?>" required><br><br>
-        <button type="submit" name="updateSettings">Save Settings</button>
-   </form>
+
+
 
         <div id="messageContainer">
 
@@ -268,6 +296,24 @@ if (isset($_GET['action'])) {
             <input type="text" id="messageInput" placeholder="Type a message..." required>
             <button type="submit">Send</button>
         </form>
+</div>
+
+</div>
+<div class="tab-content" id="tab-2">
+    <h2>Content for Tab 2</h2>
+    <form method="POST">
+        <label for="botToken">Bot Token:</label><br>
+        <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
+        <label for="channelID">Channel ID:</label><br>
+        <input type="text" id="channelID" name="channelID" value="<?= htmlspecialchars($channelId) ?>" required><br><br>
+        <label for="guildID">Guild ID:</label><br>
+        <input type="text" id="guildID" name="guildID" value="<?= htmlspecialchars($guildId) ?>" required><br><br>
+        <button type="submit" name="updateSettings">Save Settings</button>
+   </form>
+</div>
+<div class="tab-content" id="tab-3">
+    <h2>Content for Tab 3</h2>
+    <p>This is the content of Tab 3.</p>
 </div>
 
 
@@ -395,51 +441,27 @@ function fetchChannels() {
     fetchChannels(); // Initial fetch
 
 
-/* ADS------------------------------------------------------------------------------------------------
-                // Define the ads: an array of objects with type and source
-                const ads = [
-            { type: 'image', src: '../assets/background.jpg' }, 
-            { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' }, 
-            { type: 'iframe', src: 'https://discord.com/widget?id=1277599930621366312&theme=dark' },
-        ];
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
 
-        let currentAdIndex = 0; // Start with the first ad
-        const adRotator = document.getElementById("adRotator");
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-tab');
 
-        // Function to display the current ad
-        function displayAd() {
-            const ad = ads[currentAdIndex];
-            adRotator.innerHTML = ""; // Clear the previous ad
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
 
-            if (ad.type === "image") {
-                const img = document.createElement("img");
-                img.src = ad.src;
-                img.alt = "Advertisement";
-                adRotator.appendChild(img);
-            } else if (ad.type === "video") {
-                const video = document.createElement("video");
-                video.src = ad.src;
-                video.autoplay = true;
-                video.muted = true;
-                video.loop = true;
-                adRotator.appendChild(video);
-            } else if (ad.type === "iframe") {
-                const iframe = document.createElement("iframe");
-                iframe.src = ad.src;
-                iframe.allowFullscreen = true;
-                iframe.height = "100%"
-                iframe.sandbox = "allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
-                adRotator.appendChild(iframe);
-            }
-            
-
-            // Move to the next ad, looping back to the start if needed
-            currentAdIndex = (currentAdIndex + 1) % ads.length;
-        }
-
-        // Start rotating ads every 5 seconds
-        displayAd(); // Display the first ad immediately
-        setInterval(displayAd, 6000); // Change ads every 5 seconds */
+                contents.forEach(content => {
+                    if (content.id === `tab-${target}`) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
     </script>
 </body>
 </html>
