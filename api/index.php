@@ -217,7 +217,7 @@ if (isset($_GET['action'])) {
         <button type="submit" name="updateSettings">Save Settings</button>
    </form>
 
-        <div id="messageContainer">
+        <div id="messageContainer" style="max-height: 50%">
 
             <!-- Messages will be dynamically added here -->
         </div>
