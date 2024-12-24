@@ -115,7 +115,7 @@ if (isset($_GET['action'])) {
 						.column {
             flex-direction: column;
         }
-						.column {
+						.row {
             flex-direction: row;
         }
         #messageContainer {
@@ -202,13 +202,13 @@ if (isset($_GET['action'])) {
     </style>
 </head>
 <body>
-
-<div class="container">
+<div class="container row">
+<div class="container column">
     <ul class="channel-list" id="channelList"></ul>
 </div>
 
 
-<div class="container">
+<div class="container column">
 
 <form method="POST">
         <label for="botToken">Bot Token:</label><br>
@@ -229,7 +229,7 @@ if (isset($_GET['action'])) {
             <button type="submit">Send</button>
         </form>
 </div>
-
+</div>
 
     <script>
         const messageContainer = document.getElementById("messageContainer");
