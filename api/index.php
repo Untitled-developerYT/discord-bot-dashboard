@@ -112,6 +112,12 @@ if (isset($_GET['action'])) {
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+						.column {
+            flex-direction: column;
+        }
+						.column {
+            flex-direction: row;
+        }
         #messageContainer {
             flex: 1;
             overflow-y: auto;
