@@ -198,13 +198,12 @@ if (isset($_GET['action'])) {
 <body>
 
 
+
 <div class="container">
-    <h1>Choose a Discord Channel</h1>
-    <button id="fetchChannels">Fetch Channels</button>
+<div class="container">
     <ul class="channel-list" id="channelList"></ul>
 </div>
 
-<div class="container">
 <form method="POST">
         <label for="botToken">Bot Token:</label><br>
         <input type="password" id="botToken" name="botToken" value="<?= htmlspecialchars($botToken) ?>" required><br><br>
