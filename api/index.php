@@ -181,7 +181,7 @@ if (isset($_GET['action'])) {
         .channel-list li:hover {
             background: #ddd;
         }
-        @media (max-width: 600px) {
+        @media (max-width: 800px) {
             form {
                 flex-direction: column; /* Switch to vertical layout */
                 align-items: stretch; /* Make inputs take full width */
@@ -197,12 +197,12 @@ if (isset($_GET['action'])) {
 </head>
 <body>
 
-
-
-<div class="container">
 <div class="container">
     <ul class="channel-list" id="channelList"></ul>
 </div>
+
+
+<div class="container">
 
 <form method="POST">
         <label for="botToken">Bot Token:</label><br>
