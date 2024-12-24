@@ -107,7 +107,7 @@ if (isset($_GET['action'])) {
             display: flex;
             height: 100vh;
             position: relative;
-									 max-width: 70%
+									 max-width: 70%;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
