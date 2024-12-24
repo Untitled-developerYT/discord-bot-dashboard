@@ -105,7 +105,6 @@ if (isset($_GET['action'])) {
         }
         .container {
             display: flex;
-            flex-direction: column;
             height: 100vh;
             max-width: 50%;
             position: relative;
