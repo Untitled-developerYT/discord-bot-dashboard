@@ -101,7 +101,6 @@ if (isset($_GET['action'])) {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
         .container {
             display: flex;
